@@ -50,17 +50,17 @@
   {
     "week": "week-04",
     "title": "React Campus Service Request",
-    "status": "ready",
+    "status": "submitted",
     "sourceOrigin": "course-starter",
     "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
     "originalCommit": "067c21c4eae5aac9a1ebeacde9966447adb717e8",
-    "pullRequestUrl": "",
+    "pullRequestUrl": "https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/4",
     "submissionTag": "lab-04-submission-v1",
     "testStatus": "pass",
     "notes": "Completed React components, state, controlled form, validation, filtering, delete, responsive UI, and evidence.",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-04/",
     "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-04/labs/week-04/source",
     "hasPublish": true,
-    "sourceEntries": 13
+    "sourceEntries": 12
   }
 ]
