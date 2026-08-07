@@ -3,10 +3,10 @@
 | รายการ | ข้อมูล |
 |---|---|
 | รายวิชา | ENGSE203 การเขียนโปรแกรมสำหรับวิศวกรซอฟต์แวร์ |
-| รหัสนักศึกษา | STUDENT-ID |
-| ชื่อ-นามสกุล | ชื่อ-นามสกุล |
-| Section | SEC-X |
-| GitHub Username | GITHUB-USERNAME |
-| Repository | `engse203-student-labs-STUDENT-ID` |
-
-> ไฟล์นี้จะถูกปรับข้อมูลเมื่อรัน `npm run setup`
+| รหัสนักศึกษา | 68543210078 |
+| ชื่อ-นามสกุล | “ปริยากร |
+| Section | SEC1 |
+| GitHub Username | mangporunicorn |
+| Repository | `engse203-student-labs-68543210078` |
+| Mode | `new-course` |
+| Pages Hub | https://mangporunicorn.github.io/engse203-student-labs-68543210078/ |
