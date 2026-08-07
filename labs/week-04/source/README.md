@@ -88,7 +88,7 @@ npm --prefix labs/week-04/source run build
 | TC-09 Mobile           | Layout ที่ความกว้าง 375px แสดงผลได้โดยไม่มี Horizontal Scroll                    | Pass      | `../evidence/mobile-375.png`              |
 | TC-10 Keyboard         | สามารถใช้ Keyboard เข้าถึง Form, Filter และปุ่มต่าง ๆ ได้ และมี Focus State      | Pass      | `../evidence/keyboard-focus.png`          |
 | TC-11 Build | `npm run build` และ `npm run preview` ทำงานผ่าน สามารถเปิด production build ได้ตามปกติ | Pass | `../evidence/build.png`, `../evidence/preview.png` |
-| TC-12 Pages            | ต้องยืนยันหลัง Merge และ Deploy GitHub Pages จาก `main /docs`                    | Pending   | เพิ่ม Screenshot GitHub Pages หลัง Deploy |
+| TC-12 Pages | GitHub Pages เปิดผ่าน Private/Incognito ได้ หน้าเว็บและ assets โหลดครบ ไม่มี 404 หรือ Console error | Pass | `../evidence/pages-incognito.png` |
 
 ## Screenshots
 

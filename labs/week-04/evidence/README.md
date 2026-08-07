@@ -32,6 +32,3 @@
 
 ### TC-12 — GitHub Pages
 ![TC-12 GitHub Pages](./evidence/pages-incognito.png)
-
-### TC-12 — GitHub Pages Console
-![TC-12 Pages Console](./evidence/pages-console.png)
