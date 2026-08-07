@@ -1,12 +1,12 @@
 {
   "week": "week-04",
   "title": "React Campus Service Request",
-  "status": "draft",
+  "status": "submitted",
   "sourceOrigin": "course-starter",
-  "originalRepoUrl": "",
-  "originalCommit": "",
-  "pullRequestUrl": "",
-  "submissionTag": "",
-  "testStatus": "not-tested",
-  "notes": "React/Vite build output ต้องอยู่ใน publish/ ก่อนสร้าง Pages Hub"
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "067c21c4eae5aac9a1ebeacde9966447adb717e8",
+  "pullRequestUrl": "https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/4",
+  "submissionTag": "lab-04-submission-v1",
+  "testStatus": "pass",
+  "notes": "Completed React components, state, controlled form, validation, filtering, delete, responsive UI, and evidence."
 }
