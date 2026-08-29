@@ -1,12 +1,26 @@
+import { Route, Routes } from "react-router-dom";
+
 import AppLayout from "./pages/AppLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import NewRequestPage from "./pages/NewRequestPage.jsx";
+import RequestDetailPage from "./pages/RequestDetailPage.jsx";
+import AboutPage from "./pages/AboutPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+
 
 function App() {
   return (
-    <AppLayout>
-      <DashboardPage />
-    </AppLayout>
+    <Routes>
+     <Route element={<AppLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route element={<NewRequestPage />} path="requests/new" />
+        <Route element={<RequestDetailPage />} path="requests/:requestId" />
+        <Route element={<AboutPage />} path="about" />
+        <Route element={<NotFoundPage />} path="*" />
+      </Route>
+    </Routes>
   );
 }
+
 
 export default App;
