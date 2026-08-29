@@ -62,8 +62,19 @@ export function readStoredRequests() {
   try {
     const envelope = JSON.parse(rawValue);
 
-    // TODO 5B-A2:
-    // ตรวจ schemaVersion และ validateRequests ให้ครบใน CP04b
+    if (envelope?.schemaVersion !== SCHEMA_VERSION) {
+      return {
+        status: 'invalid',
+        reason: 'เวอร์ชันข้อมูลที่บันทึกไว้ไม่ตรงกับระบบ',
+      };
+    }
+
+    if (!validateRequests(envelope.requests)) {
+      return {
+        status: 'invalid',
+        reason: 'ข้อมูลคำร้องที่บันทึกไว้ไม่ถูกต้อง',
+      };
+    }
 
     return {
       status: 'valid',

@@ -30,7 +30,12 @@ function DashboardPage() {
     setErrorMessage("");
     setNotice("");
 
-    getRequests({ scenario })
+    getRequests({
+      scenario,
+      onRecovery: (message) => {
+        setNotice(message);
+      },
+    })
       .then((data) => {
         setRequests(data);
         setLoadState("success");
@@ -41,7 +46,6 @@ function DashboardPage() {
             ? error.message
             : "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ",
         );
-
         setLoadState("error");
       });
 

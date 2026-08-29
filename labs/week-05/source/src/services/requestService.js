@@ -161,7 +161,7 @@ function createRequestId(requests) {
 // async function loadNormalRequests(onRecovery) {
 //   throw new Error('TODO 5B-2: loadNormalRequests');
 // }
-async function loadNormalRequests() {
+async function loadNormalRequests(onRecovery) {
   const stored = readStoredRequests();
 
   if (stored.status === 'valid') {
@@ -169,11 +169,13 @@ async function loadNormalRequests() {
   }
 
   const seedRequests = await fetchSeedRequests();
-
   writeStoredRequests(seedRequests);
 
-  // TODO 5B-2b:
-  // แจ้งผู้ใช้เมื่อกู้ข้อมูลจากของเสีย (ทำใน CP04b)
+  if (stored.status === 'invalid') {
+    onRecovery?.(
+      `ตรวจพบข้อมูลที่บันทึกไว้ไม่ถูกต้อง ระบบกู้คืนข้อมูลตัวอย่างแล้ว: ${stored.reason}`,
+    );
+  }
 
   return seedRequests;
 }
