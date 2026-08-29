@@ -1,0 +1,16 @@
+{
+  "week": "week-05",
+  "title": "Persistent Campus Service Request",
+  "status": "ready",
+  "sourceOrigin": "course-starter",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "",
+  "testStatus": "pass",
+  "notes": "Completed LAB05 routing, service layer, dynamic detail, localStorage persistence, recovery, regression testing, responsive UI, accessibility, and evidence.",
+  "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-05/",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-05/labs/week-05/source",
+  "hasPublish": true,
+  "sourceEntries": 12
+}
