@@ -116,7 +116,15 @@ setRequests(nextRequests);
   onChange={(e) => setSearchText(e.target.value)}
 />
             {/* TODO B3: เพิ่ม onMarkDone={handleMarkDone} และเขียน handleMarkDone ให้เรียก updateRequestStatus แล้ว setRequests เพื่อให้ summary อัปเดต + รอด refresh */}
-            <RequestList requests={filteredRequests} onDeleteRequest={handleDelete} />
+            <RequestList
+  requests={filteredRequests}
+  onDeleteRequest={handleDelete}
+  emptyMessage={
+    searchText.trim()
+      ? 'ไม่พบคำร้องที่ตรงกับการค้นหา'
+      : 'ไม่มีคำร้องที่ตรงกับตัวกรองนี้'
+  }
+/>
           </section>
         </>
       )}

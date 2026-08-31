@@ -1,16 +1,18 @@
 import RequestCard from './RequestCard.jsx';
 
-function RequestList({ requests, onDeleteRequest }) {
-  if (requests.length === 0) return <p className="subtle-empty">ไม่มีคำร้องที่ตรงกับตัวกรองนี้</p>;
+function RequestList({ requests, onDeleteRequest, emptyMessage }) {
+  if (requests.length === 0) {
+    return <p className="subtle-empty">{emptyMessage}</p>;
+  }
+
   return (
     <div className="request-list" data-testid="request-list">
       {requests.map((request) => (
-
-      <RequestCard
-        key={request.id}
-        request={request}
-        onDeleteRequest={onDeleteRequest}
-      />
+        <RequestCard
+          key={request.id}
+          request={request}
+          onDeleteRequest={onDeleteRequest}
+        />
       ))}
     </div>
   );
