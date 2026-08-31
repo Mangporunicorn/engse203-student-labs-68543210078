@@ -1,8 +1,17 @@
 import RequestCard from './RequestCard.jsx';
 
-function RequestList({ requests, onDeleteRequest, emptyMessage }) {
+function RequestList({
+  requests,
+  onDeleteRequest,
+  onMarkDone,
+  emptyMessage,
+}) {
   if (requests.length === 0) {
-    return <p className="subtle-empty">{emptyMessage}</p>;
+    return (
+      <p className="subtle-empty">
+        {emptyMessage}
+      </p>
+    );
   }
 
   return (
@@ -12,6 +21,7 @@ function RequestList({ requests, onDeleteRequest, emptyMessage }) {
           key={request.id}
           request={request}
           onDeleteRequest={onDeleteRequest}
+          onMarkDone={onMarkDone}
         />
       ))}
     </div>
