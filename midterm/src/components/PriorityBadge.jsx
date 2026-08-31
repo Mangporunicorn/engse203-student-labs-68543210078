@@ -15,7 +15,11 @@ function PriorityBadge({ priority }) {
     );
   }
 
-  return null;
+  return (
+    <span className="priority-unknown">
+      ไม่ระบุ
+    </span>
+  );
 }
 
 export default PriorityBadge;
