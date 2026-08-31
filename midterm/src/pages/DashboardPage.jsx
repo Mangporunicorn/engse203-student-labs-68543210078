@@ -49,10 +49,18 @@ function DashboardPage() {
     completed: requests.filter((request) => request.status === 'completed').length,
   }), [requests]);
 
-  const filteredRequests = statusFilter === 'all'
-    ? requests
+const filteredRequests = requests.filter((request) => {
+  const matchesStatus =
+    statusFilter === 'all' || request.status === statusFilter;
 
-   : requests.filter((request) => request.status === statusFilter);
+  const keyword = searchText.toLowerCase();
+
+  const matchesSearch =
+    request.requesterName.toLowerCase().includes(keyword) ||
+    request.details.toLowerCase().includes(keyword);
+
+  return matchesStatus && matchesSearch;
+});
 
   function handleRetry() {
     if (scenario) setSearchParams({});
