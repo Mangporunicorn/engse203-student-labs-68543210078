@@ -21,11 +21,8 @@ function RequestCard({ request, onDeleteRequest, onMarkDone }) {
             {request.status}
           </span>
           {' · '}
-          {request.priority}
+          <PriorityBadge priority={request.priority} />
         </p>
-
-        {/* ทดสอบ B4.2 ชั่วคราว */}
-        <PriorityBadge priority="high" />
       </div>
 
       {request.status !== 'completed' && (
