@@ -1,0 +1,50 @@
+.headers on
+.mode box
+.bail on
+PRAGMA foreign_keys = ON;
+.print CP17: SELECT / WHERE / ORDER BY
+CP17: SELECT / WHERE / ORDER BY
+SELECT id, request_type, priority, status FROM requests WHERE priority = 'urgent' ORDER BY id;
+┌─────────┬──────────────┬──────────┬─────────────┐
+│   id    │ request_type │ priority │   status    │
+├─────────┼──────────────┼──────────┼─────────────┤
+│ REQ-001 │ แจ้งซ่อม       │ urgent   │ pending     │
+│ REQ-004 │ แจ้งซ่อม       │ urgent   │ pending     │
+│ REQ-007 │ อื่น ๆ         │ urgent   │ in-progress │
+└─────────┴──────────────┴──────────┴─────────────┘
+.print CP19: counts and foreign key
+CP19: counts and foreign key
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+PRAGMA foreign_key_list(requests);
+┌────┬─────┬───────┬──────────────┬────┬───────────┬───────────┬───────┐
+│ id │ seq │ table │     from     │ to │ on_update │ on_delete │ match │
+├────┼─────┼───────┼──────────────┼────┼───────────┼───────────┼───────┤
+│ 0  │ 0   │ users │ requester_id │ id │ NO ACTION │ NO ACTION │ NONE  │
+└────┴─────┴───────┴──────────────┴────┴───────────┴───────────┴───────┘
+PRAGMA foreign_key_check;
+.print CP21: JOIN requests and users
+CP21: JOIN requests and users
+SELECT r.id, u.name AS requesterName, r.request_type, r.status FROM requests AS r JOIN users AS u ON r.requester_id = u.id ORDER BY r.id;
+┌─────────┬───────────────┬──────────────┬─────────────┐
+│   id    │ requesterName │ request_type │   status    │
+├─────────┼───────────────┼──────────────┼─────────────┤
+│ REQ-001 │ สมชาย ใจดี     │ แจ้งซ่อม       │ pending     │
+│ REQ-002 │ สุภาวดี รักเรียน  │ บริการบัญชีผู้ใช้  │ in-progress │
+│ REQ-003 │ ธนกฤต ตั้งใจ    │ ขอใช้อุปกรณ์    │ completed   │
+│ REQ-004 │ สมชาย ใจดี     │ แจ้งซ่อม       │ pending     │
+│ REQ-005 │ ปรียา ขยันยิ่ง    │ อื่น ๆ         │ pending     │
+│ REQ-006 │ สุภาวดี รักเรียน  │ แจ้งซ่อม       │ pending     │
+│ REQ-007 │ ธนกฤต ตั้งใจ    │ อื่น ๆ         │ in-progress │
+│ REQ-008 │ ปรียา ขยันยิ่ง    │ ขอใช้อุปกรณ์    │ completed   │
+└─────────┴───────────────┴──────────────┴─────────────┘

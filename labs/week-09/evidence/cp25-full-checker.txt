@@ -1,0 +1,41 @@
+
+✅ FILE มีไฟล์ campus.db
+✅ FILE มีไฟล์ schema.sql
+✅ CP19 มีตาราง users
+✅ CP19 มีตาราง requests
+✅ CP19 users มีคอลัมน์ id, name, department
+✅ CP19 requests มีคอลัมน์ครบตามที่ออกแบบ
+✅ CP18 ทั้งสองตารางมี Primary Key
+✅ CP18 requests มี Foreign Key ชี้ไป users
+✅ CP19 requests มีคอลัมน์ NOT NULL อย่างน้อย 5 คอลัมน์
+✅ CP19 มีข้อมูลใน users อย่างน้อย 4 คน
+✅ CP19 มีข้อมูลใน requests อย่างน้อย 5 รายการ
+✅ CP22 เพิ่มข้อมูลเองแล้ว — requests อย่างน้อย 8 รายการ
+✅ CP21 JOIN ระหว่าง requests กับ users ทำงานได้
+✅ CP21 ไม่มีคำร้องที่ชี้ไปผู้ใช้ที่ไม่มีจริง
+✅ CP25 Foreign Key ปฏิเสธ requester_id ที่ไม่มีจริง
+✅ CP25 ปฏิเสธ id ที่ซ้ำกับของเดิม
+✅ CP23 schema.sql มี CREATE TABLE ทั้งสองตาราง
+✅ CP23 schema.sql มี FOREIGN KEY หรือ REFERENCES
+✅ CP23 schema.sql รันซ้ำได้ (มี DROP TABLE IF EXISTS)
+✅ CP23 schema.sql มี INSERT ข้อมูลตั้งต้น
+✅ CP23 schema.sql รันจริงแล้วสร้างฐานข้อมูลได้
+✅ CP24 มีไฟล์ DATA_MODEL.md
+✅ CP24 อธิบายเหตุผลที่แยก users ออกจาก requests
+✅ CP22 มีไฟล์ queries.sql
+✅ CP22 queries.sql มีคำสั่ง SELECT อย่างน้อย 8 ข้อ
+✅ CP22 queries.sql มีการใช้ JOIN
+✅ CP22 queries.sql มีการใช้ WHERE และ ORDER BY
+[TODO] CHAL ⭐ ใช้ GROUP BY สรุปข้อมูล
+[TODO] CHAL ⭐ ใช้ฟังก์ชันรวม (COUNT/SUM/AVG)
+[TODO] CHAL ⭐ สร้าง INDEX เพื่อให้ค้นเร็วขึ้น
+
+──────────────────────────────────────────────────────────
+🏫 ในห้อง (CP17–CP21)   ผ่าน 11/11 รายการ
+🏠 ที่บ้าน (CP22–CP25)   ผ่าน 16/16 รายการ
+⭐ Challenge            ผ่าน 0/3 รายการ
+──────────────────────────────────────────────────────────
+ผ่าน 27/30 รายการ
+
+หมายเหตุ: checker ตรวจโครงสร้างและข้อมูลได้ แต่ตรวจไม่ได้ว่าคุณเข้าใจหรือไม่
+ผู้สอนจะสุ่มถามให้เขียน query สดจากฐานข้อมูลของคุณเอง

@@ -1,0 +1,58 @@
+.headers on
+.mode box
+.bail off
+PRAGMA foreign_keys = ON;
+BEGIN;
+.print CP20: duplicate UNIQUE email should fail
+CP20: duplicate UNIQUE email should fail
+INSERT INTO users (name, department, email) VALUES ('Evidence test', 'Evidence test', 'somchai@rmutl.ac.th');
+Runtime error near line 8: UNIQUE constraint failed: users.email (19)
+.print CP20: nonexistent requester_id should fail
+CP20: nonexistent requester_id should fail
+INSERT INTO requests (id, requester_id, request_type, location, details) VALUES ('EVID-FK', 99999, 'แจ้งซ่อม', 'test', 'test');
+Runtime error near line 10: FOREIGN KEY constraint failed (19)
+.print CP20: invalid priority should fail
+CP20: invalid priority should fail
+INSERT INTO requests (id, requester_id, request_type, location, details, priority) VALUES ('EVID-PRIORITY', 1, 'แจ้งซ่อม', 'test', 'test', 'invalid');
+Runtime error near line 12: CHECK constraint failed: priority IN ('normal', 'urgent') (19)
+.print CP20: invalid status should fail
+CP20: invalid status should fail
+INSERT INTO requests (id, requester_id, request_type, location, details, status) VALUES ('EVID-STATUS', 1, 'แจ้งซ่อม', 'test', 'test', 'invalid');
+Runtime error near line 14: CHECK constraint failed: status IN (
+        'pending',
+        'in-progress',
+        'completed'
+      ) (19)
+.print CP20: NULL location should fail
+CP20: NULL location should fail
+INSERT INTO requests (id, requester_id, request_type, location, details) VALUES ('EVID-NOTNULL', 1, 'แจ้งซ่อม', NULL, 'test');
+Runtime error near line 16: NOT NULL constraint failed: requests.location (19)
+.print CP20: counts before rollback
+CP20: counts before rollback
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+ROLLBACK;
+.print CP20: counts after rollback
+CP20: counts after rollback
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
