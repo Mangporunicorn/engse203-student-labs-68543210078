@@ -7,7 +7,7 @@ import { ROOT, listLabs, readJson, exists, escapeHtml } from './common.mjs';
 for (const week of await listLabs()) {
   const labRoot = path.join(ROOT, 'labs', week);
   const metadata = await readJson(path.join(labRoot, 'lab-metadata.json'));
-  if (!metadata.frontendPath) continue;
+  if (metadata.publishOnPages === false || !metadata.frontendPath) continue;
   const frontend = path.join(ROOT, metadata.frontendPath);
   const require = createRequire(path.join(frontend, 'package.json'));
   const { build } = await import(pathToFileURL(require.resolve('vite')).href);

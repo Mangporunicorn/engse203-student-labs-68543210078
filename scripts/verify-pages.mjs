@@ -1,10 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { ROOT, exists, listLabs, readJson } from './common.mjs';
+import { ROOT, exists, listLabs, listPublishedLabs, readJson } from './common.mjs';
 
 const docs = path.join(ROOT, 'docs');
 const errors = [];
-const weeks = await listLabs();
+const weeks = await listPublishedLabs();
+for (const week of await listLabs()) {
+  if (!weeks.includes(week) && await exists(path.join(docs, 'labs', week))) errors.push(`Excluded week is still published: ${week}`);
+}
 const manifest = await readJson(path.join(docs, 'labs.json'));
 if (JSON.stringify(manifest.map((x) => x.week)) !== JSON.stringify(weeks)) errors.push('Manifest does not include every week');
 let htmlCount = 0, linkCount = 0;

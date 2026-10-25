@@ -3,7 +3,13 @@ import path from 'node:path';
 import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { ROOT } from './common.mjs';
+import { ROOT, readJson } from './common.mjs';
+
+const metadata = await readJson(path.join(ROOT, 'labs/week-08/lab-metadata.json'));
+if (metadata.publishOnPages === false) {
+  console.log('Midterm Pages build: skipped — excluded from GitHub Pages');
+  process.exit(0);
+}
 
 // Build the submitted exam without merging or editing its protected coursework source.
 const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'engse203-midterm-pages-'));

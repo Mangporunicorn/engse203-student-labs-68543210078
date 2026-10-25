@@ -31,7 +31,7 @@ for (const week of labs) {
   const metadata = await readJson(metadataPath);
   if (metadata.week !== week) errors.push(`${week}: metadata.week ไม่ตรง folder`);
   if (!["course-starter", "migrated-repository", "student-created"].includes(metadata.sourceOrigin)) errors.push(`${week}: sourceOrigin ไม่ถูกต้อง`);
-  if (!(await exists(path.join(ROOT, "docs", "labs", week, "index.html")))) errors.push(`${week}: ยังไม่มี Pages output — รัน npm run build:pages`);
+  if (metadata.publishOnPages !== false && !(await exists(path.join(ROOT, "docs", "labs", week, "index.html")))) errors.push(`${week}: ยังไม่มี Pages output — รัน npm run build:pages`);
   if (!setupMode) {
     if (!["ready", "submitted", "revision"].includes(metadata.status)) errors.push(`${week}: status ยังเป็น draft/ไม่ถูกต้อง`);
     if (metadata.testStatus !== "pass") errors.push(`${week}: testStatus ต้องเป็น pass`);

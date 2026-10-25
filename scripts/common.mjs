@@ -59,6 +59,12 @@ export async function listLabs() {
     .sort();
 }
 
+export async function listPublishedLabs() {
+  const labs = await listLabs();
+  const metadata = await Promise.all(labs.map((week) => readJson(path.join(ROOT, "labs", week, "lab-metadata.json"))));
+  return labs.filter((week, index) => metadata[index].publishOnPages !== false);
+}
+
 export async function meaningfulEntries(directory) {
   if (!(await exists(directory))) return [];
   const entries = await fs.readdir(directory);
