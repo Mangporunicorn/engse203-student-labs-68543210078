@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#092746"><title>week-03 — Responsive Web UI &amp; Form Interaction</title><style>*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;line-height:1.65;color:#10253d;background:#eaf1f7}header{padding:38px max(22px,calc((100% - 1160px)/2));color:#fff;background:linear-gradient(135deg,#071f39,#0d4c77 72%,#078386)}header p{margin:8px 0;color:#cfe4f3}h1,h2,h3{line-height:1.35}header h1{margin:10px 0;font-size:clamp(30px,5vw,48px)}a{color:#075ea8}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #d58710;outline-offset:4px}main{max-width:1160px;margin:auto;padding:26px 22px 48px}.profile,.links,.stats{display:flex;flex-wrap:wrap;gap:10px}.profile span{padding:5px 10px;border:1px solid #ffffff40;border-radius:99px;background:#ffffff12}.notice{padding:15px 18px;border-left:5px solid #d5a223;border-radius:8px;background:#fff8e6}.labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;margin-top:24px}.lab-card,.panel{padding:22px;border:1px solid #c4d6e4;border-radius:14px;background:#fff;box-shadow:0 8px 22px #09274609}.lab-card{display:flex;flex-direction:column;border-top:4px solid #1261a6}.lab-card h2{font-size:21px;margin:15px 0 8px}.lab-card .links{margin-top:auto;padding-top:16px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.week{font-weight:800;color:#1261a6}.pill{padding:4px 9px;border-radius:99px;background:#e7f3ed;font-size:12px;color:#196644;font-weight:700}.links a{display:inline-block;padding:8px 12px;border:1px solid #9fb8cc;border-radius:8px;color:#0b527f;text-decoration:none;background:#fff}.links a.primary{color:#fff;border-color:#1261a6;background:#1261a6}.muted,small{color:#52677c}header small{color:#cfe4f3}.panel{margin:20px 0}.stats{margin:18px 0}.stats span{padding:10px 14px;background:#f1f6fa;border-radius:9px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}.gallery figure{margin:0;border:1px solid #d6e2ec;border-radius:10px;overflow:hidden}.gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#f2f5f8}.gallery figcaption{padding:10px;overflow-wrap:anywhere;font-size:13px}details{margin:12px 0;border:1px solid #cbdbe7;border-radius:9px;padding:12px 16px}summary{cursor:pointer;font-weight:700;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px;color:#233c54}code{overflow-wrap:anywhere}footer{margin-top:26px;color:#52677c;font-size:13px}.report-intro{max-width:850px}.lab-card p{margin:6px 0 12px}.version{font-size:12px;margin-top:12px}@media(max-width:560px){header{padding-top:26px}.panel,.lab-card{padding:18px}main{padding:18px 14px 36px}}</style></head><body><header><small>ENGSE203 · week-03</small><h1>Responsive Web UI &amp; Form Interaction</h1><p>68543210078 · SEC1</p></header><main><p><a href="../../index.html">← กลับหน้า Portfolio</a></p><section class="panel report-intro"><span class="pill">LAB Portfolio</span><h2>รายละเอียดผลงาน</h2><p>Static site ต้องมี index.html ที่ publish root</p>
+    <div class="stats"><span>ผลตรวจ: <strong>pass</strong></span><span>Version: <code>lab-03-submission-v1</code></span></div>
+    <div class="links"><a class="primary" href="./">เปิดผลงาน</a><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/source">Source Code</a><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/evidence">Evidence</a><a href="https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/3">Pull Request</a></div></section>
+    <section class="panel"><h2>ภาพหลักฐาน (5)</h2><div class="gallery"><figure><a href="evidence/0/desktop.png"><img loading="lazy" src="evidence/0/desktop.png" alt="week-03 — desktop.png"></a><figcaption>desktop.png</figcaption></figure><figure><a href="evidence/0/form-valid.png"><img loading="lazy" src="evidence/0/form-valid.png" alt="week-03 — form-valid.png"></a><figcaption>form-valid.png</figcaption></figure><figure><a href="evidence/0/invalid.png"><img loading="lazy" src="evidence/0/invalid.png" alt="week-03 — invalid.png"></a><figcaption>invalid.png</figcaption></figure><figure><a href="evidence/0/manual-test.png"><img loading="lazy" src="evidence/0/manual-test.png" alt="week-03 — manual-test.png"></a><figcaption>manual-test.png</figcaption></figure><figure><a href="evidence/0/mobile.png"><img loading="lazy" src="evidence/0/mobile.png" alt="week-03 — mobile.png"></a><figcaption>mobile.png</figcaption></figure></div></section>
+    <section class="panel"><h2>เอกสารและผลการทดสอบ</h2><details><summary>README.md</summary><pre># Week 03 Evidence
+
+ควรมี screenshots desktop/mobile, form valid/invalid และผล manual test
+
+## desktop
+
+![desktop](./desktop.png)
+
+## mobile
+
+![mobile](./mobile.png)
+
+## form valid
+
+![form valid](./form-valid.png)
+
+## invalid
+
+![invalid ](./invalid.png)
+
+## manual test
+
+![manual test](./manual-test.png)</pre></details><details><summary>README.md</summary><pre># ENGSE203 LAB 03 — Responsive UI &amp; Form Interaction
+
+&gt; Campus Service Request
+
+## Student Information
+
+* **Student ID:** `68543210078-0`
+* **Name:** `ปริยากร ธารพรศรี`
+* **Operating System:** `macOS`
+* **Browser:** `Safari`
+* **GitHub Pages URL:** `&lt;add after deployment&gt;`
+
+---
+
+## Project Overview
+
+LAB 03 เป็นการพัฒนาเว็บ **Campus Service Request** โดยใช้ HTML, CSS และ JavaScript เพื่อฝึกการสร้าง Responsive User Interface และการโต้ตอบกับ Form
+
+เว็บสามารถรับข้อมูลคำร้องจากผู้ใช้งาน แสดงข้อมูลแบบ Live Preview ตรวจสอบความถูกต้องของข้อมูลก่อน Submit และแสดงรายการคำร้องที่ส่งสำเร็จ
+
+แนวทางการออกแบบใช้ **Mobile-first Responsive Design** โดยหน้าเว็บจะแสดงแบบ 1 column บนอุปกรณ์ขนาดเล็ก และเปลี่ยนเป็น 2 columns บนหน้าจอขนาดใหญ่
+
+---
+
+## Features
+
+### 1. Responsive Layout
+
+รองรับการแสดงผลทั้ง Desktop และ Mobile
+
+* Mobile ขนาดประมาณ `375px` แสดงผลแบบ 1 column
+* Desktop แสดง Form และ Preview แบบ 2 columns
+* ไม่มี horizontal scrolling
+* Input และ Form ปรับขนาดตามหน้าจอ
+
+### 2. Campus Service Request Form
+
+Form ประกอบด้วย:
+
+* Requester Name
+* Request Type
+* Details
+* Submit Request button
+
+ตัวอย่าง Request Type:
+
+* IT Support
+* Facility
+* Academic
+* Student Service
+
+### 3. Live Preview
+
+ข้อมูลที่ผู้ใช้กรอกจะแสดงในส่วน **Live Preview** ทันทีโดยไม่ต้องกด Submit
+
+ใช้ JavaScript Event:
+
+```javascript
+form.addEventListener(&quot;input&quot;, () =&gt; {
+  const data = readForm();
+  renderPreview(data);
+});
+```
+
+### 4. Form Validation
+
+ระบบตรวจสอบว่าผู้ใช้กรอกข้อมูลครบหรือไม่ก่อน Submit
+
+ตัวอย่างข้อความ Error:
+
+```text
+กรุณากรอกชื่อผู้แจ้ง
+กรุณาเลือกประเภทคำร้อง
+กรุณากรอกรายละเอียด
+```
+
+ถ้าข้อมูลไม่ครบ:
+
+* แสดง Error message
+* ไม่เพิ่มรายการคำร้อง
+* ไม่ Reset Form
+
+### 5. Successful Submission
+
+เมื่อกรอกข้อมูลครบและ Submit สำเร็จ:
+
+* เพิ่มข้อมูลเข้าสู่ Submitted Requests
+* แสดงข้อความสำเร็จ
+* Reset Form
+* Reset Live Preview
+* ล้าง Error message
+
+---
+
+## Technologies Used
+
+* HTML5
+* CSS3
+* JavaScript ES Modules
+* DOM API
+* FormData API
+* Vite
+* Node.js
+
+---
+
+## Project Structure
+
+```text
+labs/week-03/
+├── README.md
+├── lab-metadata.json
+├── evidence/
+│   ├── desktop.png
+│   ├── mobile-375.png
+│   ├── invalid-form.png
+│   ├── valid-submit.png
+│   └── test-cases.md
+│
+├── source/
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── vite.config.js
+│   └── src/
+│       ├── main.js
+│       └── style.css
+│
+└── publish/
+```
+
+&gt; ชื่อไฟล์ใน `evidence/` สามารถแก้ให้ตรงกับ Screenshot ที่ใช้จริงได้
+
+---
+
+## Main Files
+
+### `index.html`
+
+ใช้สร้างโครงสร้างของหน้าเว็บและ Form เช่น:
+
+* Requester Name
+* Request Type
+* Details
+* Live Preview
+* Submitted Requests
+
+ใช้ Semantic HTML และเชื่อม `label` กับ Form controls ผ่าน `for` และ `id`
+
+---
+
+### `src/style.css`
+
+ใช้กำหนดหน้าตาและ Responsive Layout ของเว็บไซต์
+
+ใช้แนวทาง Mobile-first โดยค่าเริ่มต้นเป็น 1 column:
+
+```css
+.page-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+```
+
+และเปลี่ยนเป็น 2 columns บนหน้าจอขนาดใหญ่:
+
+```css
+@media (min-width: 48rem) {
+  .page-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+  }
+}
+```
+
+Theme ของหน้าเว็บใช้โทนสีน้ำเงินใกล้เคียงกับ Pre-LAB 03
+
+---
+
+### `src/main.js`
+
+ใช้ควบคุมการทำงานของ Form และ DOM
+
+ฟังก์ชันหลักประกอบด้วย:
+
+```javascript
+readForm()
+renderPreview()
+validate()
+renderErrors()
+```
+
+และมี Event Listener สำหรับ:
+
+```javascript
+input
+submit
+```
+
+ข้อมูลจากผู้ใช้ถูกแสดงผ่าน `textContent` เพื่อหลีกเลี่ยงการนำ HTML จากข้อมูลที่ผู้ใช้กรอกมาแสดงโดยตรง
+
+---
+
+## Installation
+
+ติดตั้ง Dependencies:
+
+```bash
+npm --prefix labs/week-03/source install
+```
+
+---
+
+## Run Development Server
+
+```bash
+npm --prefix labs/week-03/source run dev
+```
+
+จากนั้นเปิด URL ที่ Vite แสดง เช่น:
+
+```text
+http://localhost:5173/
+```
+
+---
+
+## Syntax Check
+
+ตรวจสอบ JavaScript:
+
+```bash
+npm --prefix labs/week-03/source run check
+```
+
+Expected Result:
+
+```text
+No syntax errors
+```
+
+---
+
+## Build
+
+สร้าง Production Build:
+
+```bash
+npm --prefix labs/week-03/source run build
+```
+
+Output จะถูกสร้างที่:
+
+```text
+labs/week-03/source/dist/
+```
+
+---
+
+## Import Publish Output
+
+นำ Build Output เข้า Student Repository:
+
+```bash
+npm run import:publish -- week-03 labs/week-03/source/dist
+```
+
+---
+
+## Manual Testing
+
+ทำการทดสอบอย่างน้อยดังนี้:
+
+| Test Case         | Expected Result                     |
+| ----------------- | ----------------------------------- |
+| Desktop Layout    | Form และ Preview แสดงเป็น 2 columns |
+| Mobile 375px      | แสดงเป็น 1 column                   |
+| Horizontal Scroll | ไม่มี horizontal scrolling          |
+| Live Preview      | ข้อมูลเปลี่ยนทันทีเมื่อกรอก Form    |
+| Empty Submit      | แสดง Validation Error               |
+| Invalid Submit    | ไม่เพิ่มรายการและไม่ Reset Form     |
+| Valid Submit      | เพิ่ม Submitted Request สำเร็จ      |
+| Form Reset        | Form ถูก Reset หลัง Submit สำเร็จ   |
+| Console           | ไม่มี JavaScript Error              |
+
+---
+
+## Evidence
+
+หลักฐานการทดสอบเก็บไว้ใน:
+
+```text
+labs/week-03/evidence/
+```
+
+### Desktop Layout
+
+```markdown
+![Desktop Layout](./evidence/desktop.png)
+```
+
+### Mobile 375px
+
+```markdown
+![Mobile 375px](./evidence/mobile-375.png)
+```
+
+### Invalid Form Validation
+
+```markdown
+![Invalid Form](./evidence/invalid-form.png)
+```
+
+### Successful Submission
+
+```markdown
+![Valid Submission](./evidence/valid-submit.png)
+```
+
+---
+
+## Verification
+
+หลังจาก Build และเพิ่ม Evidence แล้ว ให้รัน:
+
+```bash
+npm run build:pages
+```
+
+จากนั้น:
+
+```bash
+npm run verify:lab -- week-03
+```
+
+Expected Result:
+
+```text
+PASS
+```
+
+---
+
+## Git Workflow
+
+Branch ที่ใช้:
+
+```text
+lab/week-03
+```
+
+Commit สำหรับตัวงาน:
+
+```bash
+git add .
+git commit -m &quot;feat(week-03): complete responsive service request UI&quot;
+git push -u origin lab/week-03
+```
+
+หลังจากเปิด Pull Request และเพิ่ม Submission Metadata:
+
+```bash
+git add .
+git commit -m &quot;docs(week-03): add submission metadata&quot;
+git push
+```
+
+Submission Tag:
+
+```text
+lab-03-submission-v1
+```
+
+---
+
+## Problems and Solutions
+
+### Problem: JavaScript file could not be loaded
+
+พบ Error:
+
+```text
+Failed to load url /src/app.js
+Does the file exist?
+```
+
+### Cause
+
+`index.html` อ้างอิง JavaScript ผิดชื่อ:
+
+```html
+&lt;script type=&quot;module&quot; src=&quot;/src/app.js&quot;&gt;&lt;/script&gt;
+```
+
+### Solution
+
+เปลี่ยนให้ตรงกับไฟล์จริง:
+
+```html
+&lt;script type=&quot;module&quot; src=&quot;/src/main.js&quot;&gt;&lt;/script&gt;
+```
+
+---
+
+### Problem: Variable declared more than once
+
+พบ Error:
+
+```text
+SyntaxError: Identifier &#039;form&#039; has already been declared
+```
+
+### Cause
+
+ประกาศตัวแปร:
+
+```javascript
+const form = document.querySelector(&quot;#request-form&quot;);
+```
+
+ซ้ำมากกว่า 1 ครั้ง
+
+### Solution
+
+ลบ declaration ที่ซ้ำออกและให้เหลือเพียงครั้งเดียว
+
+---
+
+## What I Learned
+
+จาก LAB 03 ได้เรียนรู้เกี่ยวกับ:
+
+* การสร้าง Responsive Web Design แบบ Mobile-first
+* การใช้ CSS Grid
+* การใช้ Media Query
+* การสร้างและจัดการ HTML Form
+* การใช้ `FormData`
+* การใช้งาน DOM API
+* การใช้ `input` และ `submit` events
+* การทำ Form Validation ด้วย JavaScript
+* การใช้ `event.preventDefault()`
+* การแสดงข้อมูลด้วย `textContent`
+* การจัดการ Error และ Status Message
+* การทดสอบ Responsive Design ด้วย Safari Developer Tools
+* การ Build Web Application ด้วย Vite
+
+---
+
+## AI / External Resource Disclosure
+
+* **AI tool used:** ChatGPT
+* **Used for:** อธิบายขั้นตอนการทำ LAB 03, ตรวจสอบข้อผิดพลาดของ JavaScript, แนะนำแนวทาง Responsive CSS และ Form Validation
+* **My adaptation:** ศึกษาแนวทางที่ได้รับและนำมาปรับใช้กับโครงสร้าง Starter Code ของ LAB 03 รวมถึงทดสอบและแก้ไขโค้ดให้สามารถทำงานตาม Requirements ของงานได้
+
+---
+
+## Submission
+
+* **Branch:** `lab/week-03`
+* **Pull Request:** `&lt;add PR URL&gt;`
+* **Submission Tag:** `lab-03-submission-v1`
+* **Test Status:** `&lt;pass after verification&gt;`
+* **GitHub Pages:** `&lt;add after deployment&gt;`
+</pre></details></section>
+    <footer>ENGSE203 · week-03 · engse203-student-labs-68543210078</footer></main></body></html>

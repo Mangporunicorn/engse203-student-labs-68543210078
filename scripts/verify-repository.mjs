@@ -35,7 +35,24 @@ for (const week of labs) {
   if (!setupMode) {
     if (!["ready", "submitted", "revision"].includes(metadata.status)) errors.push(`${week}: status ยังเป็น draft/ไม่ถูกต้อง`);
     if (metadata.testStatus !== "pass") errors.push(`${week}: testStatus ต้องเป็น pass`);
-    if ((await meaningfulEntries(path.join(labRoot, "source"))).length === 0) errors.push(`${week}: ยังไม่มี source code`);
+    const sourcePath = metadata.sourcePath ?? `labs/${week}/source`;
+    if (path.isAbsolute(sourcePath) || sourcePath.split(/[\\/]/).includes("..")) {
+      errors.push(`${week}: sourcePath ต้องเป็น relative path ภายใน repository`);
+    } else if ((await meaningfulEntries(path.join(ROOT, sourcePath))).length === 0) {
+      // The exam is intentionally kept on its own submission branch.
+      try {
+        if (!metadata.sourceRef) throw new Error("No source ref");
+        try {
+          execFileSync("git", ["cat-file", "-e", `${metadata.sourceRef}:${sourcePath}`], { cwd: ROOT, stdio: "ignore" });
+        } catch {
+          execFileSync("git", ["cat-file", "-e", `origin/${metadata.sourceRef}:${sourcePath}`], { cwd: ROOT, stdio: "ignore" });
+        }
+      } catch { errors.push(`${week}: ยังไม่มี source code ใน path/ref ที่ระบุ`); }
+    }
+    for (const evidencePath of metadata.evidencePaths ?? []) {
+      if (path.isAbsolute(evidencePath) || evidencePath.split(/[\\/]/).includes("..")
+        || !(await exists(path.join(ROOT, evidencePath)))) errors.push(`${week}: evidencePath ไม่ถูกต้อง: ${evidencePath}`);
+    }
     if (config.repositoryMode === "migration" && ["week-01", "week-02", "week-03"].includes(week) && metadata.sourceOrigin !== "migrated-repository") {
       errors.push(`${week}: migration mode ต้องตั้ง sourceOrigin เป็น migrated-repository`);
     }
@@ -51,15 +68,20 @@ for (const week of labs) {
   pass.push(`${week} ${setupMode ? "setup structure/metadata/pages" : "structure/metadata/pages"}`);
 }
 
-const forbiddenNames = new Set([".git", "node_modules", ".env", ".env.local", ".env.production"]);
-async function scanForbidden(directory) {
-  if (!(await exists(directory))) return;
-  for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
-    if (forbiddenNames.has(entry.name)) errors.push(`พบไฟล์/โฟลเดอร์ที่ห้าม commit: ${path.relative(ROOT, path.join(directory, entry.name))}`);
-    else if (entry.isDirectory()) await scanForbidden(path.join(directory, entry.name));
+// Check files that can actually be committed, rather than ignored local installs/config.
+// A production Vite config containing only an empty API base URL is public build input.
+try {
+  const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", "labs"], { cwd: ROOT, encoding: "utf8" }).split("\0").filter(Boolean);
+  for (const file of files) {
+    const parts = file.split("/");
+    const name = parts.at(-1);
+    if (parts.includes(".git") || parts.includes("node_modules")) errors.push(`พบไฟล์/โฟลเดอร์ที่ห้าม commit: ${file}`);
+    if (name === ".env" || (name.startsWith(".env.") && name !== ".env.example")) {
+      const safeProduction = name === ".env.production" && /^\s*VITE_API_BASE_URL=\s*$/.test(await fs.readFile(path.join(ROOT, file), "utf8"));
+      if (!safeProduction) errors.push(`พบไฟล์ config ส่วนตัวที่ห้าม commit: ${file}`);
+    }
   }
-}
-await scanForbidden(path.join(ROOT, "labs"));
+} catch { warnings.push("ยังตรวจรายการไฟล์ที่ Git จะ commit ไม่ได้"); }
 
 try {
   const branch = execFileSync("git", ["branch", "--show-current"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();

@@ -1,0 +1,32 @@
+{
+  "week": "week-09",
+  "title": "SQL Fundamentals & Relational Data Model",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-09/starter",
+  "sourceRef": "main",
+  "evidencePaths": [
+    "labs/week-09/evidence"
+  ],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "",
+  "testStatus": "pass",
+  "testSummary": "งานหลัก 27/27",
+  "notes": "ออกแบบฐานข้อมูล users/requests พร้อม constraints, SQL queries, JOIN และผลตรวจแต่ละ checkpoint",
+  "documents": [
+    "labs/week-09/starter/schema.sql",
+    "labs/week-09/starter/queries.sql",
+    "labs/week-09/starter/DATA_MODEL.md"
+  ],
+  "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-09/",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/starter",
+  "evidenceUrls": [
+    "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/evidence"
+  ],
+  "hasPublish": false,
+  "hasDemo": false,
+  "sourceEntries": 7
+}

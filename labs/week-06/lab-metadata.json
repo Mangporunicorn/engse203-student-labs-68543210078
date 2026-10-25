@@ -1,0 +1,22 @@
+{
+  "week": "week-06",
+  "title": "Node.js / Express API Foundation",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-06",
+  "sourceRef": "main",
+  "evidencePaths": [
+    "labs/week-06/evidence"
+  ],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "lab-06-submission-v1",
+  "testStatus": "pass",
+  "testSummary": "งานหลัก 25/25",
+  "notes": "Express CRUD API พร้อม validation, error handling และหลักฐานการทดสอบ HTTP",
+  "documents": [
+    "labs/week-06/AI_USAGE.md"
+  ]
+}

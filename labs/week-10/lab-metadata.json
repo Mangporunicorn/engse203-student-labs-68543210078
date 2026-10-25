@@ -1,0 +1,23 @@
+{
+  "week": "week-10",
+  "title": "Node.js + SQLite Database",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-10/starter",
+  "sourceRef": "main",
+  "evidencePaths": [
+    "labs/week-10/starter/evidence"
+  ],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/7",
+  "submissionTag": "lab-10-submission-v1",
+  "testStatus": "pass",
+  "testSummary": "งานหลัก 28/28",
+  "notes": "เชื่อม Express กับ SQLite ใช้ JOIN และ parameterized queries พร้อมหลักฐานการทดสอบ",
+  "documents": [
+    "labs/week-10/starter/API_CONTRACT.md"
+  ],
+  "frontendPath": "labs/week-10/starter/frontend"
+}

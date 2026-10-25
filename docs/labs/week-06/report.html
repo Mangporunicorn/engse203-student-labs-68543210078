@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#092746"><title>week-06 — Node.js / Express API Foundation</title><style>*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;line-height:1.65;color:#10253d;background:#eaf1f7}header{padding:38px max(22px,calc((100% - 1160px)/2));color:#fff;background:linear-gradient(135deg,#071f39,#0d4c77 72%,#078386)}header p{margin:8px 0;color:#cfe4f3}h1,h2,h3{line-height:1.35}header h1{margin:10px 0;font-size:clamp(30px,5vw,48px)}a{color:#075ea8}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #d58710;outline-offset:4px}main{max-width:1160px;margin:auto;padding:26px 22px 48px}.profile,.links,.stats{display:flex;flex-wrap:wrap;gap:10px}.profile span{padding:5px 10px;border:1px solid #ffffff40;border-radius:99px;background:#ffffff12}.notice{padding:15px 18px;border-left:5px solid #d5a223;border-radius:8px;background:#fff8e6}.labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;margin-top:24px}.lab-card,.panel{padding:22px;border:1px solid #c4d6e4;border-radius:14px;background:#fff;box-shadow:0 8px 22px #09274609}.lab-card{display:flex;flex-direction:column;border-top:4px solid #1261a6}.lab-card h2{font-size:21px;margin:15px 0 8px}.lab-card .links{margin-top:auto;padding-top:16px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.week{font-weight:800;color:#1261a6}.pill{padding:4px 9px;border-radius:99px;background:#e7f3ed;font-size:12px;color:#196644;font-weight:700}.links a{display:inline-block;padding:8px 12px;border:1px solid #9fb8cc;border-radius:8px;color:#0b527f;text-decoration:none;background:#fff}.links a.primary{color:#fff;border-color:#1261a6;background:#1261a6}.muted,small{color:#52677c}header small{color:#cfe4f3}.panel{margin:20px 0}.stats{margin:18px 0}.stats span{padding:10px 14px;background:#f1f6fa;border-radius:9px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}.gallery figure{margin:0;border:1px solid #d6e2ec;border-radius:10px;overflow:hidden}.gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#f2f5f8}.gallery figcaption{padding:10px;overflow-wrap:anywhere;font-size:13px}details{margin:12px 0;border:1px solid #cbdbe7;border-radius:9px;padding:12px 16px}summary{cursor:pointer;font-weight:700;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px;color:#233c54}code{overflow-wrap:anywhere}footer{margin-top:26px;color:#52677c;font-size:13px}.report-intro{max-width:850px}.lab-card p{margin:6px 0 12px}.version{font-size:12px;margin-top:12px}@media(max-width:560px){header{padding-top:26px}.panel,.lab-card{padding:18px}main{padding:18px 14px 36px}}</style></head><body><header><small>ENGSE203 · week-06</small><h1>Node.js / Express API Foundation</h1><p>68543210078 · SEC1</p></header><main><p><a href="../../index.html">← กลับหน้า Portfolio</a></p><section class="panel report-intro"><span class="pill">LAB Portfolio</span><h2>รายละเอียดผลงาน</h2><p>Express CRUD API พร้อม validation, error handling และหลักฐานการทดสอบ HTTP</p>
+    <div class="stats"><span>ผลตรวจ: <strong>งานหลัก 25/25</strong></span><span>Version: <code>lab-06-submission-v1</code></span></div>
+    <div class="links"><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-06">Source Code</a><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-06/evidence">Evidence</a></div></section>
+    <section class="panel"><h2>ภาพหลักฐาน (3)</h2><div class="gallery"><figure><a href="evidence/0/images/postman-get-200.png"><img loading="lazy" src="evidence/0/images/postman-get-200.png" alt="week-06 — images/postman-get-200.png"></a><figcaption>images/postman-get-200.png</figcaption></figure><figure><a href="evidence/0/images/postman-post-201.png"><img loading="lazy" src="evidence/0/images/postman-post-201.png" alt="week-06 — images/postman-post-201.png"></a><figcaption>images/postman-post-201.png</figcaption></figure><figure><a href="evidence/0/images/terminal-logger.png"><img loading="lazy" src="evidence/0/images/terminal-logger.png" alt="week-06 — images/terminal-logger.png"></a><figcaption>images/terminal-logger.png</figcaption></figure></div></section>
+    <section class="panel"><h2>เอกสารและผลการทดสอบ</h2><details><summary>API_TEST.md</summary><pre># API_TEST — LAB 06
+
+**ชื่อ–รหัส:** ปริยากร ธารพรศรี 68543210013-7 **วันที่ทดสอบ:** 13/09/2026
+
+&gt; บันทึก **ผลจริง** ที่เห็น ไม่ใช่ผลที่ควรได้ · ถ้าไม่ผ่านให้เขียนว่าไม่ผ่าน
+
+| # | Method | Path | ส่งอะไร | status ที่ควรได้ | status ที่ได้จริง | ผ่าน |
+|---|---|---|---|---|---|---|
+| 1 | GET | `/` | — | 200 | 200 | ☑ |
+| 2 | GET | `/api/requests` | — | 200 | 200 | ☑ |
+| 3 | GET | `/api/requests/REQ-001` | — | 200 | 200 | ☑ |
+| 4 | GET | `/api/requests/REQ-999` | — | 404 | 404 | ☑ |
+| 5 | POST | `/api/requests` | ข้อมูลครบถูกต้อง | 201 | 201 | ☑ |
+| 6 | POST | `/api/requests` | `{&quot;requesterName&quot;:&quot;x&quot;}` | 400 | 400 | ☑ |
+| 7 | DELETE | `/api/requests/REQ-003` | — | 204 | 204 | ☑ |
+| 8 | DELETE | `/api/requests/REQ-999` | — | 404 | 404 | ☑ |
+| 9 | GET | `/api/unknown` | — | 404 | 404 | ☑ |
+
+## ⭐ Challenge (ถ้าทำ)
+
+| # | Method | Path | status ที่ควรได้ | ที่ได้จริง | ผ่าน |
+|---|---|---|---|---|---|
+| 10 | GET | `/api/requests?status=pending` | 200 (กรองแล้ว) | 200 | ☑ |
+| 11 | PUT | `/api/requests/REQ-001` + `{&quot;status&quot;:&quot;in-progress&quot;}` | 200 | 200 | ☑ |
+| 12 | PUT | `/api/requests/REQ-001` + `{&quot;status&quot;:&quot;มั่ว&quot;}` | 400 | 400 | ☑ |
+
+## ทดสอบว่าข้อมูลอยู่ถาวร (CP08)
+
+| ขั้น | ทำอะไร | ผลที่เห็น |
+|---|---|---|
+| 1 | POST เพิ่มคำร้องใหม่ | เห็นคำร้องใหม่ |
+| 2 | GET ดูรายการ — เห็นคำร้องใหม่ไหม | เห็น |
+| 3 | Ctrl+C ปิดเซิร์ฟเวอร์ แล้วเปิดใหม่ | |
+| 4 | GET ดูรายการอีกครั้ง — คำร้องยังอยู่ไหม | ยังอยู่ |
+
+## สรุปผล
+
+- ผ่าน 9 / 9 (+ Challenge 3 / 3)
+- รายการที่ไม่ผ่านและสาเหตุ:
+
+## Screenshot ที่แนบ
+
+- [x] `images/postman-get-200.png`
+- [x] `images/postman-post-201.png`
+- [x] `images/terminal-logger.png`
+</pre></details><details><summary>AI_USAGE.md</summary><pre># AI_USAGE — LAB 06
+
+บันทึกการใช้ AI ระหว่างทำงาน · **ใช้ AI ได้ แต่ต้องเป็นเจ้าของโค้ดที่ส่ง**
+
+&gt; ผู้สอนจะสุ่มถามจากโค้ดที่ส่ง — ถ้าอธิบายไม่ได้ คะแนนส่วนนั้นจะถูกทบทวน
+---
+
+## ครั้งที่ 1
+
+**ถามอะไร**
+
+ขอให้ AI ช่วยอธิบายขั้นตอนการทำ LAB Week 06 ตั้งแต่ CP01 เป็นต้นไป โดยให้ยึดตาม Guide ของอาจารย์ และบอกจุดที่ต้องเก็บ Screenshot สำหรับ Evidence
+
+**AI ตอบว่าอย่างไร (สรุปสั้น)**
+
+AI ช่วยเรียงขั้นตอนการทำงานตั้งแต่ Route, Controller, Service และ Middleware พร้อมอธิบายการทดสอบ API ด้วย Postman และระบุจุดที่ต้องเก็บ Screenshot เช่น GET 200, POST 201 และ Terminal Logger
+
+**ใช้ส่วนไหน / แก้เองตรงไหน**
+
+ใช้ AI เป็นตัวช่วยอธิบายลำดับและความหมายของโค้ด แต่พิมพ์โค้ดตาม Guide ของอาจารย์และทดลองรันด้วยตนเอง
+
+**เข้าใจโค้ดที่ได้มาไหม**
+
+☑ เข้าใจทั้งหมด
+☐ เข้าใจบางส่วน
+☐ ยังไม่เข้าใจ
+
+---
+
+## ครั้งที่ 2
+
+**ถามอะไร**
+
+ขอให้ AI ช่วยตรวจปัญหาใน CP08 ที่ข้อมูลไม่คงอยู่หลัง Restart Server
+
+**AI ตอบว่าอย่างไร (สรุปสั้น)**
+
+AI อธิบายว่าฟังก์ชันที่แก้ไขข้อมูลต้องเรียก `persist()` และต้องใช้ `async/await` ให้สัมพันธ์กันระหว่าง Service และ Controller เพื่อให้ข้อมูลถูกบันทึกลง `data/requests.json`
+
+**ใช้ส่วนไหน / แก้เองตรงไหน**
+
+นำแนวทางไปตรวจ `create()`, `remove()`, `loadSeed()` และ Controller จากนั้นทดสอบด้วยการ POST ข้อมูล Restart Server และ GET ข้อมูลอีกครั้ง
+
+**เข้าใจโค้ดที่ได้มาไหม**
+
+☑ เข้าใจทั้งหมด
+☐ เข้าใจบางส่วน
+☐ ยังไม่เข้าใจ
+
+---
+
+## ครั้งที่ 3
+
+**ถามอะไร**
+
+ขอให้ AI ช่วยอธิบายและแก้ปัญหา Challenge 2 ของ `PUT /api/requests/:id` เนื่องจากทดสอบแล้วได้ 404 และ 500
+
+**AI ตอบว่าอย่างไร (สรุปสั้น)**
+
+AI อธิบายว่า `:id` เป็น Route Parameter และตอนทดสอบต้องแทนด้วย ID จริง เช่น `REQ-001` รวมถึงแนะนำให้ตรวจ Route `router.put(&#039;/:id&#039;, ...)`, Controller และ Service สำหรับการเปลี่ยนสถานะ
+
+**ใช้ส่วนไหน / แก้เองตรงไหน**
+
+ใช้คำแนะนำในการเพิ่ม PUT Route และตรวจฟังก์ชัน `updateRequestStatus()` และ `updateStatus()` แล้วทดสอบด้วย Postman จนสามารถเปลี่ยนสถานะได้
+
+**เข้าใจโค้ดที่ได้มาไหม**
+
+☑ เข้าใจทั้งหมด
+☐ เข้าใจบางส่วน
+☐ ยังไม่เข้าใจ
+
+---
+
+## ครั้งที่ 4
+
+**ถามอะไร**
+
+ขอให้ AI ช่วยตรวจปัญหา DELETE เนื่องจาก Checker รายงานว่า DELETE ทั้งกรณีมีข้อมูลและไม่มีข้อมูลตอบกลับ 500
+
+**AI ตอบว่าอย่างไร (สรุปสั้น)**
+
+AI แนะนำให้ตรวจความสัมพันธ์ระหว่าง `remove()` ใน Service กับ `deleteRequest()` ใน Controller โดยเฉพาะการใช้ `async/await`, การคืนค่า `true/false` และการเรียก `persist()` หลังลบข้อมูลสำเร็จ
+
+**ใช้ส่วนไหน / แก้เองตรงไหน**
+
+นำแนวทางไปแก้และทดสอบ DELETE อีกครั้งจน Checker ผ่านทั้งกรณี `204 No Content` และ `404 Not Found`
+
+**เข้าใจโค้ดที่ได้มาไหม**
+
+☑ เข้าใจทั้งหมด
+☐ เข้าใจบางส่วน
+☐ ยังไม่เข้าใจ
+
+---
+
+## สรุปการใช้ AI
+
+- ใช้ AI เพื่อช่วยอธิบายโจทย์และลำดับการทำงานตาม Guide
+- ใช้ AI ช่วยวิเคราะห์ Error และ Debug ปัญหาที่พบระหว่างการทดสอบ
+- ใช้ AI ช่วยอธิบายแนวคิด Route, Controller, Service, Middleware และ Persistence
+- การรัน Server, การทดสอบ API ด้วย Postman, การเก็บ Screenshot และการรัน Checker ทำด้วยตนเอง
+- ตรวจสอบผลลัพธ์และแก้ไขโค้ดจน Checker ผ่านครบตามเกณฑ์</pre></details></section>
+    <footer>ENGSE203 · week-06 · engse203-student-labs-68543210078</footer></main></body></html>
