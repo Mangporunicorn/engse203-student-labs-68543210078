@@ -1,0 +1,32 @@
+{
+  "week": "week-07",
+  "title": "RESTful API, Validation & Frontend Integration",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-07/source",
+  "sourceRef": "main",
+  "evidencePaths": [
+    "labs/week-07/evidance"
+  ],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "lab-07-submission-v1",
+  "testStatus": "pass",
+  "testSummary": "งานหลัก 33/33",
+  "notes": "เชื่อม React กับ REST API พร้อม CORS, validation และสถานะ loading/error",
+  "documents": [
+    "labs/week-07/source/API_CONTRACT.md",
+    "labs/week-07/source/AI_USAGE.md"
+  ],
+  "frontendPath": "labs/week-07/source/frontend",
+  "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-07/",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-07/source",
+  "evidenceUrls": [
+    "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-07/evidance"
+  ],
+  "hasPublish": false,
+  "hasDemo": true,
+  "sourceEntries": 6
+}

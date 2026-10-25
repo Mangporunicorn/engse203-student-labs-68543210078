@@ -11,8 +11,12 @@
     "testStatus": "pass",
     "notes": "รัน hello.js และตรวจ environment แล้ว",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-01/",
-    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-01/labs/week-01/source",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-01/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-01/evidence"
+    ],
     "hasPublish": false,
+    "hasDemo": false,
     "sourceEntries": 4
   },
   {
@@ -27,8 +31,12 @@
     "testStatus": "pass",
     "notes": "นำ Vite build output ที่มี index.html เข้า publish/",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-02/",
-    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-02/labs/week-02/source",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-02/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-02/evidence"
+    ],
     "hasPublish": true,
+    "hasDemo": false,
     "sourceEntries": 12
   },
   {
@@ -43,8 +51,12 @@
     "testStatus": "pass",
     "notes": "Static site ต้องมี index.html ที่ publish root",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-03/",
-    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-03/labs/week-03/source",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/evidence"
+    ],
     "hasPublish": true,
+    "hasDemo": false,
     "sourceEntries": 8
   },
   {
@@ -59,8 +71,12 @@
     "testStatus": "pass",
     "notes": "Completed React components, state, controlled form, validation, filtering, delete, responsive UI, and evidence.",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-04/",
-    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-04/labs/week-04/source",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-04/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-04/evidence"
+    ],
     "hasPublish": true,
+    "hasDemo": false,
     "sourceEntries": 12
   },
   {
@@ -69,14 +85,270 @@
     "status": "submitted",
     "sourceOrigin": "course-starter",
     "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
-    "originalCommit": "",
+    "originalCommit": "389e238ed35932e950bceb148f0d19e5f740b7f4",
     "pullRequestUrl": "https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/6",
     "submissionTag": "lab-05-submission-v1",
     "testStatus": "pass",
     "notes": "Completed LAB05 routing, service layer, dynamic detail, localStorage persistence, recovery, regression testing, responsive UI, accessibility, and evidence.",
     "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-05/",
-    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-05/labs/week-05/source",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-05/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-05/evidence"
+    ],
     "hasPublish": true,
+    "hasDemo": false,
     "sourceEntries": 11
+  },
+  {
+    "week": "week-06",
+    "title": "Node.js / Express API Foundation",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-06",
+    "sourceRef": "main",
+    "evidencePaths": [
+      "labs/week-06/evidence"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "lab-06-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 25/25",
+    "notes": "Express CRUD API พร้อม validation, error handling และหลักฐานการทดสอบ HTTP",
+    "documents": [
+      "labs/week-06/AI_USAGE.md"
+    ],
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-06/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-06",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-06/evidence"
+    ],
+    "hasPublish": false,
+    "hasDemo": false,
+    "sourceEntries": 9
+  },
+  {
+    "week": "week-07",
+    "title": "RESTful API, Validation & Frontend Integration",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-07/source",
+    "sourceRef": "main",
+    "evidencePaths": [
+      "labs/week-07/evidance"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "lab-07-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 33/33",
+    "notes": "เชื่อม React กับ REST API พร้อม CORS, validation และสถานะ loading/error",
+    "documents": [
+      "labs/week-07/source/API_CONTRACT.md",
+      "labs/week-07/source/AI_USAGE.md"
+    ],
+    "frontendPath": "labs/week-07/source/frontend",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-07/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-07/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-07/evidance"
+    ],
+    "hasPublish": false,
+    "hasDemo": true,
+    "sourceEntries": 6
+  },
+  {
+    "week": "week-08",
+    "title": "Midterm — Campus Service Request",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "midterm",
+    "sourceRef": "midterm",
+    "evidencePaths": [
+      "labs/week-08/evidence"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "midterm-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "build ผ่าน",
+    "notes": "ผลงานสอบกลางภาค: Debug, Search, Persistence และ PriorityBadge เผยแพร่จาก branch midterm",
+    "documents": [],
+    "kind": "exam",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-08/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/midterm/midterm",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-08/evidence"
+    ],
+    "hasPublish": true,
+    "hasDemo": false,
+    "sourceEntries": 0
+  },
+  {
+    "week": "week-09",
+    "title": "SQL Fundamentals & Relational Data Model",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-09/starter",
+    "sourceRef": "main",
+    "evidencePaths": [
+      "labs/week-09/evidence"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 27/27",
+    "notes": "ออกแบบฐานข้อมูล users/requests พร้อม constraints, SQL queries, JOIN และผลตรวจแต่ละ checkpoint",
+    "documents": [
+      "labs/week-09/starter/schema.sql",
+      "labs/week-09/starter/queries.sql",
+      "labs/week-09/starter/DATA_MODEL.md"
+    ],
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-09/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/starter",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/evidence"
+    ],
+    "hasPublish": false,
+    "hasDemo": false,
+    "sourceEntries": 7
+  },
+  {
+    "week": "week-10",
+    "title": "Node.js + SQLite Database",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-10/starter",
+    "sourceRef": "main",
+    "evidencePaths": [
+      "labs/week-10/starter/evidence"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "https://github.com/Mangporunicorn/engse203-student-labs-68543210078/pull/7",
+    "submissionTag": "lab-10-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 28/28",
+    "notes": "เชื่อม Express กับ SQLite ใช้ JOIN และ parameterized queries พร้อมหลักฐานการทดสอบ",
+    "documents": [
+      "labs/week-10/starter/API_CONTRACT.md"
+    ],
+    "frontendPath": "labs/week-10/starter/frontend",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-10/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-10/starter",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-10/starter/evidence"
+    ],
+    "hasPublish": false,
+    "hasDemo": true,
+    "sourceEntries": 6
+  },
+  {
+    "week": "week-11",
+    "title": "Full-Stack Integration & Production Build",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-11/source",
+    "sourceRef": "main",
+    "evidencePaths": [
+      "labs/week-11/source/evidence"
+    ],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "",
+    "testStatus": "pass",
+    "testSummary": "ตัวตรวจงานหลัก 37/37",
+    "notes": "ระบบ React + Express + SQLite พร้อม config, health check และ production build เผยแพร่โค้ดและภาพหลักฐานโดยไม่มีวิดีโอสาธิต",
+    "documents": [
+      "labs/week-11/source/README.md",
+      "labs/week-11/source/API_CONTRACT.md",
+      "labs/week-11/source/AI_USAGE.md",
+      "labs/week-11/source/DATABASE_CHOICES.md"
+    ],
+    "frontendPath": "labs/week-11/source/frontend",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-11/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-11/source",
+    "evidenceUrls": [
+      "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-11/source/evidence"
+    ],
+    "hasPublish": false,
+    "hasDemo": true,
+    "sourceEntries": 15
+  },
+  {
+    "week": "week-12",
+    "title": "Testing & Debugging",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-12/source",
+    "sourceRef": "main",
+    "evidencePaths": [],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "lab-12-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 20/20",
+    "notes": "Vitest unit/integration tests, test cases ค่าขอบ และบันทึกการแก้ 4 bugs พร้อม regression tests",
+    "documents": [
+      "labs/week-12/source/README.md",
+      "labs/week-12/source/API_CONTRACT.md",
+      "labs/week-12/source/DATABASE_CHOICES.md",
+      "labs/week-12/source/TEST_CASES.md",
+      "labs/week-12/source/DEBUG_LOG.md",
+      "labs/week-12/source/BUG_REPORTS.md"
+    ],
+    "frontendPath": "labs/week-12/source/frontend",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-12/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-12/source",
+    "evidenceUrls": [],
+    "hasPublish": false,
+    "hasDemo": true,
+    "sourceEntries": 17
+  },
+  {
+    "week": "week-13",
+    "title": "Quality & Security",
+    "status": "ready",
+    "sourceOrigin": "student-created",
+    "sourcePath": "labs/week-13/source",
+    "sourceRef": "main",
+    "evidencePaths": [],
+    "evidenceRef": "main",
+    "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+    "originalCommit": "",
+    "pullRequestUrl": "",
+    "submissionTag": "lab-13-submission-v1",
+    "testStatus": "pass",
+    "testSummary": "งานหลัก 23/23",
+    "notes": "Validation, scrypt password hashing, JWT login, 401/403 และ fail-fast configuration พร้อมการทดสอบ",
+    "documents": [
+      "labs/week-13/source/README.md",
+      "labs/week-13/source/API_CONTRACT.md",
+      "labs/week-13/source/DATABASE_CHOICES.md",
+      "labs/week-13/source/TEST_CASES.md",
+      "labs/week-13/source/DEBUG_LOG.md",
+      "labs/week-13/source/BUG_REPORTS.md"
+    ],
+    "frontendPath": "labs/week-13/source/frontend",
+    "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-13/",
+    "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-13/source",
+    "evidenceUrls": [],
+    "hasPublish": false,
+    "hasDemo": true,
+    "sourceEntries": 18
   }
 ]

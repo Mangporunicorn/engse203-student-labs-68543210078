@@ -1,0 +1,1150 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#092746"><title>week-09 — SQL Fundamentals &amp; Relational Data Model</title><style>*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;line-height:1.65;color:#10253d;background:#eaf1f7}header{padding:38px max(22px,calc((100% - 1160px)/2));color:#fff;background:linear-gradient(135deg,#071f39,#0d4c77 72%,#078386)}header p{margin:8px 0;color:#cfe4f3}h1,h2,h3{line-height:1.35}header h1{margin:10px 0;font-size:clamp(30px,5vw,48px)}a{color:#075ea8}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #d58710;outline-offset:4px}main{max-width:1160px;margin:auto;padding:26px 22px 48px}.profile,.links,.stats{display:flex;flex-wrap:wrap;gap:10px}.profile span{padding:5px 10px;border:1px solid #ffffff40;border-radius:99px;background:#ffffff12}.notice{padding:15px 18px;border-left:5px solid #d5a223;border-radius:8px;background:#fff8e6}.labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;margin-top:24px}.lab-card,.panel{padding:22px;border:1px solid #c4d6e4;border-radius:14px;background:#fff;box-shadow:0 8px 22px #09274609}.lab-card{display:flex;flex-direction:column;border-top:4px solid #1261a6}.lab-card h2{font-size:21px;margin:15px 0 8px}.lab-card .links{margin-top:auto;padding-top:16px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.week{font-weight:800;color:#1261a6}.pill{padding:4px 9px;border-radius:99px;background:#e7f3ed;font-size:12px;color:#196644;font-weight:700}.links a{display:inline-block;padding:8px 12px;border:1px solid #9fb8cc;border-radius:8px;color:#0b527f;text-decoration:none;background:#fff}.links a.primary{color:#fff;border-color:#1261a6;background:#1261a6}.muted,small{color:#52677c}header small{color:#cfe4f3}.panel{margin:20px 0}.stats{margin:18px 0}.stats span{padding:10px 14px;background:#f1f6fa;border-radius:9px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}.gallery figure{margin:0;border:1px solid #d6e2ec;border-radius:10px;overflow:hidden}.gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#f2f5f8}.gallery figcaption{padding:10px;overflow-wrap:anywhere;font-size:13px}details{margin:12px 0;border:1px solid #cbdbe7;border-radius:9px;padding:12px 16px}summary{cursor:pointer;font-weight:700;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px;color:#233c54}code{overflow-wrap:anywhere}footer{margin-top:26px;color:#52677c;font-size:13px}.report-intro{max-width:850px}.lab-card p{margin:6px 0 12px}.version{font-size:12px;margin-top:12px}@media(max-width:560px){header{padding-top:26px}.panel,.lab-card{padding:18px}main{padding:18px 14px 36px}}</style></head><body><header><small>ENGSE203 · week-09</small><h1>SQL Fundamentals &amp; Relational Data Model</h1><p>68543210078 · SEC1</p></header><main><p><a href="../../index.html">← กลับหน้า Portfolio</a></p><section class="panel report-intro"><span class="pill">LAB Portfolio</span><h2>รายละเอียดผลงาน</h2><p>ออกแบบฐานข้อมูล users/requests พร้อม constraints, SQL queries, JOIN และผลตรวจแต่ละ checkpoint</p>
+    <div class="stats"><span>ผลตรวจ: <strong>งานหลัก 27/27</strong></span></div>
+    <div class="links"><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/starter">Source Code</a><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-09/evidence">Evidence</a></div></section>
+
+    <section class="panel"><h2>เอกสารและผลการทดสอบ</h2><details><summary>EVIDENCE.md</summary><pre># ENGSE203 Week 09 — SQL Fundamentals: Evidence
+
+เก็บผลตรวจจากงานใน `labs/week-09/starter/` วันที่ 27 กันยายน 2026 โดยใช้ `campus.db` ที่มีอยู่จริง เปิด `PRAGMA foreign_keys = ON;` ก่อนคำสั่ง SQLite ทุกชุด ไฟล์ `.txt` เป็นผลลัพธ์จากการรันคำสั่งจริง ไม่ใช่ภาพหน้าจอ
+
+| CP | หลักฐาน | ผลที่ตรวจได้ |
+| --- | --- | --- |
+| CP17 | [`cp17-cp19-cp21-sql.txt`](cp17-cp19-cp21-sql.txt) | `SELECT` ร่วมกับ `WHERE priority = &#039;urgent&#039;` และ `ORDER BY id` ได้ 3 แถว |
+| CP18 | [`../starter/DATA_MODEL.md`](../starter/DATA_MODEL.md) และ `cp17-cp19-cp21-sql.txt` | เอกสารอธิบาย `users` หนึ่งคนต่อ `requests` หลายรายการ; FK คือ `requests.requester_id → users.id` ไม่สร้างหลักฐานแยก |
+| CP19 | `cp17-cp19-cp21-sql.txt` | `users = 4`, `requests = 8`; `PRAGMA foreign_key_list(requests)` ชี้ `requester_id` ไป `users.id`; `foreign_key_check` ไม่พบแถวผิด |
+| CP20 | [`cp20-constraints.txt`](cp20-constraints.txt) | SQLite ปฏิเสธอีเมลซ้ำ, FK ที่ไม่มีจริง, `priority`/`status` ที่ไม่อนุญาต และ `NULL` ใน `location`; หลัง `ROLLBACK` ยังเป็น 4/8 |
+| CP21 | `cp17-cp19-cp21-sql.txt` | `JOIN` ดึงชื่อผู้แจ้งจาก `users` ได้ครบ 8 คำร้อง |
+| CP22 | [`cp22-queries.txt`](cp22-queries.txt), [`../starter/queries.sql`](../starter/queries.sql) | `.read queries.sql` รันครบ 8 `SELECT` โดยไม่มี SQL error; มี `WHERE`, `JOIN`, `ORDER BY`, `DISTINCT`, `LIMIT` |
+| CP23 | [`cp23-schema-rerun.txt`](cp23-schema-rerun.txt) | `.read schema.sql` บนฐานข้อมูลชั่วคราวใหม่ แล้วรันซ้ำอีกครั้ง ทั้งสองครั้งได้ 4/8 และไม่มี SQL error |
+| CP24 | `../starter/DATA_MODEL.md` | มีครบ 6 หัวข้อ: ภาพรวม; เหตุผลที่แยก 2 ตาราง; รายละเอียดตาราง; เหตุผลของชนิด/ข้อกำหนด; ตัวอย่าง JOIN; ข้อสังเกต Week 10 ไม่สร้างหลักฐานแยก |
+| CP25 | [`cp25-inclass-checker.txt`](cp25-inclass-checker.txt), [`cp25-full-checker.txt`](cp25-full-checker.txt) | checker: ในห้อง 11/11 และที่บ้าน 16/16 ผ่าน รวมงานบังคับ 27/27 |
+
+## วิธีตรวจและขอบเขต
+
+- CP17, CP19, CP21 และ CP22 อ่าน `starter/campus.db` โดยเปิดแบบ read-only พร้อมเปิด foreign key
+- CP20 ใช้สำเนาชั่วคราวของ `campus.db` เริ่ม `BEGIN` ก่อนทดสอบค่าผิด แล้ว `ROLLBACK` หลังทดสอบ ข้อความ `Runtime error` ทั้ง 5 จุดคือผลที่คาดจาก constraint จึงทำให้ SQLite CLI ชุดนี้คืน exit code 1; ไม่ใช่ความเสียหายของข้อมูล
+- CP23 ใช้ฐานข้อมูลชั่วคราวใหม่ ไม่รัน `schema.sql` บน `starter/campus.db`
+- CP25 รันจาก `starter/` ด้วย `node --disable-warning=ExperimentalWarning check-week09.mjs --inclass` และ `node --disable-warning=ExperimentalWarning check-week09.mjs` ผลตรวจแสดง Challenge เพิ่มเติม 0/3 จึงเป็น 27/30 เมื่อรวม Challenge ซึ่งไม่ได้อยู่ใน 27 รายการบังคับ
+- ตรวจ SHA-256 ของ `campus.db`, `schema.sql`, `queries.sql`, `DATA_MODEL.md`, `playground-seed.sql`, `check-week09.mjs` ก่อนและหลัง: ตรงกันทุกไฟล์; `campus.db` = `7cb95de84fffb7e3325199624c9427298a9976856d52c3011baf242aadfde1cd`
+
+ไม่มีการแก้ source, ฐานข้อมูลหลัก หรือไฟล์เดิม และไม่มีการ commit, push หรือ tag
+</pre></details><details><summary>cp17-cp19-cp21-sql.txt</summary><pre>.headers on
+.mode box
+.bail on
+PRAGMA foreign_keys = ON;
+.print CP17: SELECT / WHERE / ORDER BY
+CP17: SELECT / WHERE / ORDER BY
+SELECT id, request_type, priority, status FROM requests WHERE priority = &#039;urgent&#039; ORDER BY id;
+┌─────────┬──────────────┬──────────┬─────────────┐
+│   id    │ request_type │ priority │   status    │
+├─────────┼──────────────┼──────────┼─────────────┤
+│ REQ-001 │ แจ้งซ่อม       │ urgent   │ pending     │
+│ REQ-004 │ แจ้งซ่อม       │ urgent   │ pending     │
+│ REQ-007 │ อื่น ๆ         │ urgent   │ in-progress │
+└─────────┴──────────────┴──────────┴─────────────┘
+.print CP19: counts and foreign key
+CP19: counts and foreign key
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+PRAGMA foreign_key_list(requests);
+┌────┬─────┬───────┬──────────────┬────┬───────────┬───────────┬───────┐
+│ id │ seq │ table │     from     │ to │ on_update │ on_delete │ match │
+├────┼─────┼───────┼──────────────┼────┼───────────┼───────────┼───────┤
+│ 0  │ 0   │ users │ requester_id │ id │ NO ACTION │ NO ACTION │ NONE  │
+└────┴─────┴───────┴──────────────┴────┴───────────┴───────────┴───────┘
+PRAGMA foreign_key_check;
+.print CP21: JOIN requests and users
+CP21: JOIN requests and users
+SELECT r.id, u.name AS requesterName, r.request_type, r.status FROM requests AS r JOIN users AS u ON r.requester_id = u.id ORDER BY r.id;
+┌─────────┬───────────────┬──────────────┬─────────────┐
+│   id    │ requesterName │ request_type │   status    │
+├─────────┼───────────────┼──────────────┼─────────────┤
+│ REQ-001 │ สมชาย ใจดี     │ แจ้งซ่อม       │ pending     │
+│ REQ-002 │ สุภาวดี รักเรียน  │ บริการบัญชีผู้ใช้  │ in-progress │
+│ REQ-003 │ ธนกฤต ตั้งใจ    │ ขอใช้อุปกรณ์    │ completed   │
+│ REQ-004 │ สมชาย ใจดี     │ แจ้งซ่อม       │ pending     │
+│ REQ-005 │ ปรียา ขยันยิ่ง    │ อื่น ๆ         │ pending     │
+│ REQ-006 │ สุภาวดี รักเรียน  │ แจ้งซ่อม       │ pending     │
+│ REQ-007 │ ธนกฤต ตั้งใจ    │ อื่น ๆ         │ in-progress │
+│ REQ-008 │ ปรียา ขยันยิ่ง    │ ขอใช้อุปกรณ์    │ completed   │
+└─────────┴───────────────┴──────────────┴─────────────┘
+</pre></details><details><summary>cp20-constraints.txt</summary><pre>.headers on
+.mode box
+.bail off
+PRAGMA foreign_keys = ON;
+BEGIN;
+.print CP20: duplicate UNIQUE email should fail
+CP20: duplicate UNIQUE email should fail
+INSERT INTO users (name, department, email) VALUES (&#039;Evidence test&#039;, &#039;Evidence test&#039;, &#039;somchai@rmutl.ac.th&#039;);
+Runtime error near line 8: UNIQUE constraint failed: users.email (19)
+.print CP20: nonexistent requester_id should fail
+CP20: nonexistent requester_id should fail
+INSERT INTO requests (id, requester_id, request_type, location, details) VALUES (&#039;EVID-FK&#039;, 99999, &#039;แจ้งซ่อม&#039;, &#039;test&#039;, &#039;test&#039;);
+Runtime error near line 10: FOREIGN KEY constraint failed (19)
+.print CP20: invalid priority should fail
+CP20: invalid priority should fail
+INSERT INTO requests (id, requester_id, request_type, location, details, priority) VALUES (&#039;EVID-PRIORITY&#039;, 1, &#039;แจ้งซ่อม&#039;, &#039;test&#039;, &#039;test&#039;, &#039;invalid&#039;);
+Runtime error near line 12: CHECK constraint failed: priority IN (&#039;normal&#039;, &#039;urgent&#039;) (19)
+.print CP20: invalid status should fail
+CP20: invalid status should fail
+INSERT INTO requests (id, requester_id, request_type, location, details, status) VALUES (&#039;EVID-STATUS&#039;, 1, &#039;แจ้งซ่อม&#039;, &#039;test&#039;, &#039;test&#039;, &#039;invalid&#039;);
+Runtime error near line 14: CHECK constraint failed: status IN (
+        &#039;pending&#039;,
+        &#039;in-progress&#039;,
+        &#039;completed&#039;
+      ) (19)
+.print CP20: NULL location should fail
+CP20: NULL location should fail
+INSERT INTO requests (id, requester_id, request_type, location, details) VALUES (&#039;EVID-NOTNULL&#039;, 1, &#039;แจ้งซ่อม&#039;, NULL, &#039;test&#039;);
+Runtime error near line 16: NOT NULL constraint failed: requests.location (19)
+.print CP20: counts before rollback
+CP20: counts before rollback
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+ROLLBACK;
+.print CP20: counts after rollback
+CP20: counts after rollback
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+</pre></details><details><summary>cp22-queries.txt</summary><pre>.headers on
+.mode box
+.bail on
+PRAGMA foreign_keys = ON;
+.read /Users/pari/class/ENGSE203/engse203-student-labs-68543210078/labs/week-09/starter/queries.sql
+-- ═══════════════════════════════════════════════════════════
+-- queries.sql — คำสั่งค้นหาตอบโจทย์
+-- 🏠 TODO W09-QUERY (CP22) · เขียนอย่างน้อย 8 ข้อ
+--
+-- เขียนคำสั่งจริงที่รันได้ ไม่ใช่เขียนบรรยาย
+-- ทุกข้อต้องทดสอบแล้วว่าได้ผลลัพธ์ถูกต้อง
+-- ═══════════════════════════════════════════════════════════
+
+-- ① คำร้องทั้งหมด เรียงตามรหัส
+SELECT *
+FROM requests
+ORDER BY id;
+┌─────────┬──────────────┬──────────────┬────────────────┬─────────────────────────────┬──────────┬─────────────┬─────────────────────┐
+│   id    │ requester_id │ request_type │    location    │           details           │ priority │   status    │     created_at      │
+├─────────┼──────────────┼──────────────┼────────────────┼─────────────────────────────┼──────────┼─────────────┼─────────────────────┤
+│ REQ-001 │ 1            │ แจ้งซ่อม       │ ห้องปฏิบัติการ 301 │ เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า │ urgent   │ pending     │ 2026-09-27 20:24:07 │
+│ REQ-002 │ 2            │ บริการบัญชีผู้ใช้  │ อาคารวิศวกรรม   │ เข้าสู่ระบบห้องปฏิบัติการไม่ได้      │ normal   │ in-progress │ 2026-09-27 20:24:07 │
+│ REQ-003 │ 3            │ ขอใช้อุปกรณ์    │ ห้องประชุม 2     │ ขอยืมโปรเจกเตอร์              │ normal   │ completed   │ 2026-09-27 20:24:07 │
+│ REQ-004 │ 1            │ แจ้งซ่อม       │ ห้องปฏิบัติการ 302 │ คอมพิวเตอร์เครื่องที่ 5 เปิดไม่ติด   │ urgent   │ pending     │ 2026-09-27 20:24:07 │
+│ REQ-005 │ 4            │ อื่น ๆ         │ ห้องสมุด ชั้น 2    │ ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ  │ normal   │ pending     │ 2026-09-27 20:24:07 │
+│ REQ-006 │ 2            │ แจ้งซ่อม       │ ห้องปฏิบัติการ 401 │ ไฟในห้องกะพริบตลอดเวลา        │ normal   │ pending     │ 2026-09-27 20:24:07 │
+│ REQ-007 │ 3            │ อื่น ๆ         │ อาคารวิศวกรรม   │ ขอเพิ่มจุดเชื่อมต่ออินเทอร์เน็ต      │ urgent   │ in-progress │ 2026-09-27 20:24:07 │
+│ REQ-008 │ 4            │ ขอใช้อุปกรณ์    │ ห้องสมุด ชั้น 1    │ ขอยืมอุปกรณ์สำหรับนำเสนอ        │ normal   │ completed   │ 2026-09-27 20:24:07 │
+└─────────┴──────────────┴──────────────┴────────────────┴─────────────────────────────┴──────────┴─────────────┴─────────────────────┘
+
+-- ② คำร้องที่ยังไม่ได้ดำเนินการ (status = &#039;pending&#039;)
+SELECT id, location, details, status
+FROM requests
+WHERE status = &#039;pending&#039;
+ORDER BY id;
+┌─────────┬────────────────┬─────────────────────────────┬─────────┐
+│   id    │    location    │           details           │ status  │
+├─────────┼────────────────┼─────────────────────────────┼─────────┤
+│ REQ-001 │ ห้องปฏิบัติการ 301 │ เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า │ pending │
+│ REQ-004 │ ห้องปฏิบัติการ 302 │ คอมพิวเตอร์เครื่องที่ 5 เปิดไม่ติด   │ pending │
+│ REQ-005 │ ห้องสมุด ชั้น 2    │ ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ  │ pending │
+│ REQ-006 │ ห้องปฏิบัติการ 401 │ ไฟในห้องกะพริบตลอดเวลา        │ pending │
+└─────────┴────────────────┴─────────────────────────────┴─────────┘
+
+-- ③ คำร้องเร่งด่วนที่ยังไม่เสร็จ — ใช้เงื่อนไข 2 ข้อพร้อมกัน
+SELECT id, location, priority, status
+FROM requests
+WHERE priority = &#039;urgent&#039;
+  AND status &lt;&gt; &#039;completed&#039;
+ORDER BY id;
+┌─────────┬────────────────┬──────────┬─────────────┐
+│   id    │    location    │ priority │   status    │
+├─────────┼────────────────┼──────────┼─────────────┤
+│ REQ-001 │ ห้องปฏิบัติการ 301 │ urgent   │ pending     │
+│ REQ-004 │ ห้องปฏิบัติการ 302 │ urgent   │ pending     │
+│ REQ-007 │ อาคารวิศวกรรม   │ urgent   │ in-progress │
+└─────────┴────────────────┴──────────┴─────────────┘
+
+-- ④ ค้นคำร้องจากคำบางส่วนในรายละเอียด  (คำใบ้: LIKE)
+SELECT id, details
+FROM requests
+WHERE details LIKE &#039;%ไฟ%&#039;
+ORDER BY id;
+┌─────────┬────────────────────────────┐
+│   id    │          details           │
+├─────────┼────────────────────────────┤
+│ REQ-005 │ ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ │
+│ REQ-006 │ ไฟในห้องกะพริบตลอดเวลา       │
+└─────────┴────────────────────────────┘
+
+-- ⑤ คำร้องพร้อมชื่อผู้แจ้ง  ← ต้องใช้ JOIN เพราะชื่ออยู่คนละตาราง
+SELECT
+  r.id,
+  u.name AS requesterName,
+  r.request_type,
+  r.location,
+  r.status
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+ORDER BY r.id;
+┌─────────┬───────────────┬──────────────┬────────────────┬─────────────┐
+│   id    │ requesterName │ request_type │    location    │   status    │
+├─────────┼───────────────┼──────────────┼────────────────┼─────────────┤
+│ REQ-001 │ สมชาย ใจดี     │ แจ้งซ่อม       │ ห้องปฏิบัติการ 301 │ pending     │
+│ REQ-002 │ สุภาวดี รักเรียน  │ บริการบัญชีผู้ใช้  │ อาคารวิศวกรรม   │ in-progress │
+│ REQ-003 │ ธนกฤต ตั้งใจ    │ ขอใช้อุปกรณ์    │ ห้องประชุม 2     │ completed   │
+│ REQ-004 │ สมชาย ใจดี     │ แจ้งซ่อม       │ ห้องปฏิบัติการ 302 │ pending     │
+│ REQ-005 │ ปรียา ขยันยิ่ง    │ อื่น ๆ         │ ห้องสมุด ชั้น 2    │ pending     │
+│ REQ-006 │ สุภาวดี รักเรียน  │ แจ้งซ่อม       │ ห้องปฏิบัติการ 401 │ pending     │
+│ REQ-007 │ ธนกฤต ตั้งใจ    │ อื่น ๆ         │ อาคารวิศวกรรม   │ in-progress │
+│ REQ-008 │ ปรียา ขยันยิ่ง    │ ขอใช้อุปกรณ์    │ ห้องสมุด ชั้น 1    │ completed   │
+└─────────┴───────────────┴──────────────┴────────────────┴─────────────┘
+
+-- ⑥ คำร้องเฉพาะของภาควิชาหนึ่ง  (JOIN + WHERE)
+SELECT
+  r.id,
+  u.name AS requesterName,
+  u.department,
+  r.request_type,
+  r.location,
+  r.status
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+WHERE u.department = &#039;วิศวกรรมซอฟต์แวร์&#039;
+ORDER BY r.id;
+┌─────────┬───────────────┬────────────────┬──────────────┬────────────────┬─────────────┐
+│   id    │ requesterName │   department   │ request_type │    location    │   status    │
+├─────────┼───────────────┼────────────────┼──────────────┼────────────────┼─────────────┤
+│ REQ-001 │ สมชาย ใจดี     │ วิศวกรรมซอฟต์แวร์ │ แจ้งซ่อม       │ ห้องปฏิบัติการ 301 │ pending     │
+│ REQ-002 │ สุภาวดี รักเรียน  │ วิศวกรรมซอฟต์แวร์ │ บริการบัญชีผู้ใช้  │ อาคารวิศวกรรม   │ in-progress │
+│ REQ-004 │ สมชาย ใจดี     │ วิศวกรรมซอฟต์แวร์ │ แจ้งซ่อม       │ ห้องปฏิบัติการ 302 │ pending     │
+│ REQ-006 │ สุภาวดี รักเรียน  │ วิศวกรรมซอฟต์แวร์ │ แจ้งซ่อม       │ ห้องปฏิบัติการ 401 │ pending     │
+└─────────┴───────────────┴────────────────┴──────────────┴────────────────┴─────────────┘
+
+-- ⑦ รายชื่อผู้แจ้งที่ไม่ซ้ำกัน  (คำใบ้: DISTINCT)
+SELECT DISTINCT
+  u.name AS requesterName
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+ORDER BY requesterName;
+┌───────────────┐
+│ requesterName │
+├───────────────┤
+│ ธนกฤต ตั้งใจ    │
+│ ปรียา ขยันยิ่ง    │
+│ สมชาย ใจดี     │
+│ สุภาวดี รักเรียน  │
+└───────────────┘
+
+-- ⑧ คำร้อง 3 รายการล่าสุด  (คำใบ้: ORDER BY + LIMIT)
+SELECT
+  id,
+  location,
+  status,
+  created_at
+FROM requests
+ORDER BY created_at DESC, id DESC
+LIMIT 3;
+┌─────────┬────────────────┬─────────────┬─────────────────────┐
+│   id    │    location    │   status    │     created_at      │
+├─────────┼────────────────┼─────────────┼─────────────────────┤
+│ REQ-008 │ ห้องสมุด ชั้น 1    │ completed   │ 2026-09-27 20:24:07 │
+│ REQ-007 │ อาคารวิศวกรรม   │ in-progress │ 2026-09-27 20:24:07 │
+│ REQ-006 │ ห้องปฏิบัติการ 401 │ pending     │ 2026-09-27 20:24:07 │
+└─────────┴────────────────┴─────────────┴─────────────────────┘
+
+-- ⭐ Challenge ─────────────────────────────────────────────
+-- ⑨ นับจำนวนคำร้องแยกตามสถานะ  (GROUP BY + COUNT)
+-- ⑩ ใครแจ้งคำร้องมากที่สุด  (คำใบ้: LEFT JOIN เพื่อให้คนที่ยังไม่เคยแจ้งติดมาด้วย)
+-- ⑪ สร้าง INDEX ให้การค้นด้วย status เร็วขึ้น
+.print CP22: all 8 SELECT statements finished without SQLite error
+CP22: all 8 SELECT statements finished without SQLite error
+</pre></details><details><summary>cp23-schema-rerun.txt</summary><pre>.headers on
+.mode box
+.bail on
+PRAGMA foreign_keys = ON;
+.print CP23: first schema.sql run on a new temporary database
+CP23: first schema.sql run on a new temporary database
+.read /Users/pari/class/ENGSE203/engse203-student-labs-68543210078/labs/week-09/starter/schema.sql
+-- ═══════════════════════════════════════════════════════════
+-- Campus Service Request — โครงสร้างฐานข้อมูล
+-- ENGSE203 สัปดาห์ที่ 9 · หน่วยที่ 4
+--
+-- 🏠 TODO W09-SCHEMA (CP23)
+-- ไฟล์นี้ต้องรันแล้วสร้างฐานข้อมูลได้ครบทั้งหมดในครั้งเดียว
+-- และต้อง &quot;รันซ้ำได้&quot; โดยไม่ error
+-- ═══════════════════════════════════════════════════════════
+
+PRAGMA foreign_keys = ON;
+
+-- TODO ①  ลบตารางเดิมก่อน เพื่อให้รันไฟล์นี้ซ้ำได้
+--         ⚠ ลำดับสำคัญ — ต้องลบตารางที่มี foreign key ก่อน
+--         คำใบ้: DROP TABLE IF EXISTS ...
+DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS users;
+
+-- TODO ②  สร้างตาราง users
+--         ต้องมี: id (PK, INTEGER, AUTOINCREMENT)
+--                name (TEXT, ห้ามว่าง)
+--                department (TEXT, ห้ามว่าง)
+--                email (TEXT, ห้ามว่าง, ห้ามซ้ำ)
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  department TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE
+);
+
+-- TODO ③  สร้างตาราง requests
+--         ต้องมี: id (PK, TEXT — ใช้รหัสแบบ REQ-001)
+--                requester_id (INTEGER, ห้ามว่าง, ชี้ไป users(id))
+--                request_type (TEXT, ห้ามว่าง, จำกัดค่าด้วย CHECK)
+--                location, details (TEXT, ห้ามว่าง)
+--                priority (ค่าเริ่มต้น &#039;normal&#039;, จำกัดด้วย CHECK)
+--                status (ค่าเริ่มต้น &#039;pending&#039;, จำกัดด้วย CHECK)
+--                created_at (ค่าเริ่มต้นเป็นเวลาปัจจุบัน)
+--
+--         ⚠ อย่าลืม FOREIGN KEY — เป็นหัวใจของสัปดาห์นี้
+CREATE TABLE requests (
+  id TEXT PRIMARY KEY,
+  requester_id INTEGER NOT NULL,
+
+  request_type TEXT NOT NULL
+    CHECK (
+      request_type IN (
+        &#039;แจ้งซ่อม&#039;,
+        &#039;บริการบัญชีผู้ใช้&#039;,
+        &#039;ขอใช้อุปกรณ์&#039;,
+        &#039;อื่น ๆ&#039;
+      )
+    ),
+
+  location TEXT NOT NULL,
+
+  details TEXT NOT NULL,
+
+  priority TEXT NOT NULL DEFAULT &#039;normal&#039;
+    CHECK (
+      priority IN (&#039;normal&#039;, &#039;urgent&#039;)
+    ),
+
+  status TEXT NOT NULL DEFAULT &#039;pending&#039;
+    CHECK (
+      status IN (
+        &#039;pending&#039;,
+        &#039;in-progress&#039;,
+        &#039;completed&#039;
+      )
+    ),
+
+  created_at TEXT NOT NULL
+    DEFAULT (datetime(&#039;now&#039;,&#039;localtime&#039;)),
+
+  FOREIGN KEY (requester_id)
+    REFERENCES users(id)
+);
+
+-- TODO ④  ใส่ข้อมูลตั้งต้น
+--         users อย่างน้อย 4 คน · requests อย่างน้อย 5 รายการ
+INSERT INTO users (name, department, email)
+VALUES
+  (&#039;สมชาย ใจดี&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;somchai@rmutl.ac.th&#039;),
+
+  (&#039;สุภาวดี รักเรียน&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;supawadee@rmutl.ac.th&#039;),
+
+  (&#039;ธนกฤต ตั้งใจ&#039;,
+   &#039;วิศวกรรมไฟฟ้า&#039;,
+   &#039;thanakrit@rmutl.ac.th&#039;),
+
+  (&#039;ปรียา ขยันยิ่ง&#039;,
+   &#039;สำนักวิทยบริการ&#039;,
+   &#039;preeya@rmutl.ac.th&#039;);
+
+-- TODO ④ ใส่ข้อมูลตั้งต้น
+-- requests อย่างน้อย 5 รายการ
+
+INSERT INTO requests (
+  id,
+  requester_id,
+  request_type,
+  location,
+  details,
+  priority,
+  status
+)
+VALUES
+  (
+    &#039;REQ-001&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 301&#039;,
+    &#039;เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-002&#039;,
+    2,
+    &#039;บริการบัญชีผู้ใช้&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;เข้าสู่ระบบห้องปฏิบัติการไม่ได้&#039;,
+    &#039;normal&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-003&#039;,
+    3,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องประชุม 2&#039;,
+    &#039;ขอยืมโปรเจกเตอร์&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  ),
+  (
+    &#039;REQ-004&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 302&#039;,
+    &#039;คอมพิวเตอร์เครื่องที่ 5 เปิดไม่ติด&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-005&#039;,
+    4,
+    &#039;อื่น ๆ&#039;,
+    &#039;ห้องสมุด ชั้น 2&#039;,
+    &#039;ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-006&#039;,
+    2,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 401&#039;,
+    &#039;ไฟในห้องกะพริบตลอดเวลา&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-007&#039;,
+    3,
+    &#039;อื่น ๆ&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;ขอเพิ่มจุดเชื่อมต่ออินเทอร์เน็ต&#039;,
+    &#039;urgent&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-008&#039;,
+    4,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องสมุด ชั้น 1&#039;,
+    &#039;ขอยืมอุปกรณ์สำหรับนำเสนอ&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  );
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+.print CP23: second schema.sql run on the same temporary database
+CP23: second schema.sql run on the same temporary database
+.read /Users/pari/class/ENGSE203/engse203-student-labs-68543210078/labs/week-09/starter/schema.sql
+-- ═══════════════════════════════════════════════════════════
+-- Campus Service Request — โครงสร้างฐานข้อมูล
+-- ENGSE203 สัปดาห์ที่ 9 · หน่วยที่ 4
+--
+-- 🏠 TODO W09-SCHEMA (CP23)
+-- ไฟล์นี้ต้องรันแล้วสร้างฐานข้อมูลได้ครบทั้งหมดในครั้งเดียว
+-- และต้อง &quot;รันซ้ำได้&quot; โดยไม่ error
+-- ═══════════════════════════════════════════════════════════
+
+PRAGMA foreign_keys = ON;
+
+-- TODO ①  ลบตารางเดิมก่อน เพื่อให้รันไฟล์นี้ซ้ำได้
+--         ⚠ ลำดับสำคัญ — ต้องลบตารางที่มี foreign key ก่อน
+--         คำใบ้: DROP TABLE IF EXISTS ...
+DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS users;
+
+-- TODO ②  สร้างตาราง users
+--         ต้องมี: id (PK, INTEGER, AUTOINCREMENT)
+--                name (TEXT, ห้ามว่าง)
+--                department (TEXT, ห้ามว่าง)
+--                email (TEXT, ห้ามว่าง, ห้ามซ้ำ)
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  department TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE
+);
+
+-- TODO ③  สร้างตาราง requests
+--         ต้องมี: id (PK, TEXT — ใช้รหัสแบบ REQ-001)
+--                requester_id (INTEGER, ห้ามว่าง, ชี้ไป users(id))
+--                request_type (TEXT, ห้ามว่าง, จำกัดค่าด้วย CHECK)
+--                location, details (TEXT, ห้ามว่าง)
+--                priority (ค่าเริ่มต้น &#039;normal&#039;, จำกัดด้วย CHECK)
+--                status (ค่าเริ่มต้น &#039;pending&#039;, จำกัดด้วย CHECK)
+--                created_at (ค่าเริ่มต้นเป็นเวลาปัจจุบัน)
+--
+--         ⚠ อย่าลืม FOREIGN KEY — เป็นหัวใจของสัปดาห์นี้
+CREATE TABLE requests (
+  id TEXT PRIMARY KEY,
+  requester_id INTEGER NOT NULL,
+
+  request_type TEXT NOT NULL
+    CHECK (
+      request_type IN (
+        &#039;แจ้งซ่อม&#039;,
+        &#039;บริการบัญชีผู้ใช้&#039;,
+        &#039;ขอใช้อุปกรณ์&#039;,
+        &#039;อื่น ๆ&#039;
+      )
+    ),
+
+  location TEXT NOT NULL,
+
+  details TEXT NOT NULL,
+
+  priority TEXT NOT NULL DEFAULT &#039;normal&#039;
+    CHECK (
+      priority IN (&#039;normal&#039;, &#039;urgent&#039;)
+    ),
+
+  status TEXT NOT NULL DEFAULT &#039;pending&#039;
+    CHECK (
+      status IN (
+        &#039;pending&#039;,
+        &#039;in-progress&#039;,
+        &#039;completed&#039;
+      )
+    ),
+
+  created_at TEXT NOT NULL
+    DEFAULT (datetime(&#039;now&#039;,&#039;localtime&#039;)),
+
+  FOREIGN KEY (requester_id)
+    REFERENCES users(id)
+);
+
+-- TODO ④  ใส่ข้อมูลตั้งต้น
+--         users อย่างน้อย 4 คน · requests อย่างน้อย 5 รายการ
+INSERT INTO users (name, department, email)
+VALUES
+  (&#039;สมชาย ใจดี&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;somchai@rmutl.ac.th&#039;),
+
+  (&#039;สุภาวดี รักเรียน&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;supawadee@rmutl.ac.th&#039;),
+
+  (&#039;ธนกฤต ตั้งใจ&#039;,
+   &#039;วิศวกรรมไฟฟ้า&#039;,
+   &#039;thanakrit@rmutl.ac.th&#039;),
+
+  (&#039;ปรียา ขยันยิ่ง&#039;,
+   &#039;สำนักวิทยบริการ&#039;,
+   &#039;preeya@rmutl.ac.th&#039;);
+
+-- TODO ④ ใส่ข้อมูลตั้งต้น
+-- requests อย่างน้อย 5 รายการ
+
+INSERT INTO requests (
+  id,
+  requester_id,
+  request_type,
+  location,
+  details,
+  priority,
+  status
+)
+VALUES
+  (
+    &#039;REQ-001&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 301&#039;,
+    &#039;เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-002&#039;,
+    2,
+    &#039;บริการบัญชีผู้ใช้&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;เข้าสู่ระบบห้องปฏิบัติการไม่ได้&#039;,
+    &#039;normal&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-003&#039;,
+    3,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องประชุม 2&#039;,
+    &#039;ขอยืมโปรเจกเตอร์&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  ),
+  (
+    &#039;REQ-004&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 302&#039;,
+    &#039;คอมพิวเตอร์เครื่องที่ 5 เปิดไม่ติด&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-005&#039;,
+    4,
+    &#039;อื่น ๆ&#039;,
+    &#039;ห้องสมุด ชั้น 2&#039;,
+    &#039;ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-006&#039;,
+    2,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 401&#039;,
+    &#039;ไฟในห้องกะพริบตลอดเวลา&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-007&#039;,
+    3,
+    &#039;อื่น ๆ&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;ขอเพิ่มจุดเชื่อมต่ออินเทอร์เน็ต&#039;,
+    &#039;urgent&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-008&#039;,
+    4,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องสมุด ชั้น 1&#039;,
+    &#039;ขอยืมอุปกรณ์สำหรับนำเสนอ&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  );
+SELECT COUNT(*) AS users FROM users;
+┌───────┐
+│ users │
+├───────┤
+│ 4     │
+└───────┘
+SELECT COUNT(*) AS requests FROM requests;
+┌──────────┐
+│ requests │
+├──────────┤
+│ 8        │
+└──────────┘
+.print CP23: second run finished without SQLite error
+CP23: second run finished without SQLite error
+</pre></details><details><summary>cp25-full-checker.txt</summary><pre>
+✅ FILE มีไฟล์ campus.db
+✅ FILE มีไฟล์ schema.sql
+✅ CP19 มีตาราง users
+✅ CP19 มีตาราง requests
+✅ CP19 users มีคอลัมน์ id, name, department
+✅ CP19 requests มีคอลัมน์ครบตามที่ออกแบบ
+✅ CP18 ทั้งสองตารางมี Primary Key
+✅ CP18 requests มี Foreign Key ชี้ไป users
+✅ CP19 requests มีคอลัมน์ NOT NULL อย่างน้อย 5 คอลัมน์
+✅ CP19 มีข้อมูลใน users อย่างน้อย 4 คน
+✅ CP19 มีข้อมูลใน requests อย่างน้อย 5 รายการ
+✅ CP22 เพิ่มข้อมูลเองแล้ว — requests อย่างน้อย 8 รายการ
+✅ CP21 JOIN ระหว่าง requests กับ users ทำงานได้
+✅ CP21 ไม่มีคำร้องที่ชี้ไปผู้ใช้ที่ไม่มีจริง
+✅ CP25 Foreign Key ปฏิเสธ requester_id ที่ไม่มีจริง
+✅ CP25 ปฏิเสธ id ที่ซ้ำกับของเดิม
+✅ CP23 schema.sql มี CREATE TABLE ทั้งสองตาราง
+✅ CP23 schema.sql มี FOREIGN KEY หรือ REFERENCES
+✅ CP23 schema.sql รันซ้ำได้ (มี DROP TABLE IF EXISTS)
+✅ CP23 schema.sql มี INSERT ข้อมูลตั้งต้น
+✅ CP23 schema.sql รันจริงแล้วสร้างฐานข้อมูลได้
+✅ CP24 มีไฟล์ DATA_MODEL.md
+✅ CP24 อธิบายเหตุผลที่แยก users ออกจาก requests
+✅ CP22 มีไฟล์ queries.sql
+✅ CP22 queries.sql มีคำสั่ง SELECT อย่างน้อย 8 ข้อ
+✅ CP22 queries.sql มีการใช้ JOIN
+✅ CP22 queries.sql มีการใช้ WHERE และ ORDER BY
+[TODO] CHAL ⭐ ใช้ GROUP BY สรุปข้อมูล
+[TODO] CHAL ⭐ ใช้ฟังก์ชันรวม (COUNT/SUM/AVG)
+[TODO] CHAL ⭐ สร้าง INDEX เพื่อให้ค้นเร็วขึ้น
+
+──────────────────────────────────────────────────────────
+🏫 ในห้อง (CP17–CP21)   ผ่าน 11/11 รายการ
+🏠 ที่บ้าน (CP22–CP25)   ผ่าน 16/16 รายการ
+⭐ Challenge            ผ่าน 0/3 รายการ
+──────────────────────────────────────────────────────────
+ผ่าน 27/30 รายการ
+
+หมายเหตุ: checker ตรวจโครงสร้างและข้อมูลได้ แต่ตรวจไม่ได้ว่าคุณเข้าใจหรือไม่
+ผู้สอนจะสุ่มถามให้เขียน query สดจากฐานข้อมูลของคุณเอง
+</pre></details><details><summary>cp25-inclass-checker.txt</summary><pre>
+✅ FILE มีไฟล์ campus.db
+✅ CP19 มีตาราง users
+✅ CP19 มีตาราง requests
+✅ CP19 users มีคอลัมน์ id, name, department
+✅ CP19 requests มีคอลัมน์ครบตามที่ออกแบบ
+✅ CP18 ทั้งสองตารางมี Primary Key
+✅ CP18 requests มี Foreign Key ชี้ไป users
+✅ CP19 มีข้อมูลใน users อย่างน้อย 4 คน
+✅ CP19 มีข้อมูลใน requests อย่างน้อย 5 รายการ
+✅ CP21 JOIN ระหว่าง requests กับ users ทำงานได้
+✅ CP21 ไม่มีคำร้องที่ชี้ไปผู้ใช้ที่ไม่มีจริง
+
+──────────────────────────────────────────────────────────
+🏫 ในห้อง (CP17–CP21)   ผ่าน 11/11 รายการ
+
+หมายเหตุ: checker ตรวจโครงสร้างและข้อมูลได้ แต่ตรวจไม่ได้ว่าคุณเข้าใจหรือไม่
+ผู้สอนจะสุ่มถามให้เขียน query สดจากฐานข้อมูลของคุณเอง
+</pre></details><details><summary>schema.sql</summary><pre>-- ═══════════════════════════════════════════════════════════
+-- Campus Service Request — โครงสร้างฐานข้อมูล
+-- ENGSE203 สัปดาห์ที่ 9 · หน่วยที่ 4
+--
+-- 🏠 TODO W09-SCHEMA (CP23)
+-- ไฟล์นี้ต้องรันแล้วสร้างฐานข้อมูลได้ครบทั้งหมดในครั้งเดียว
+-- และต้อง &quot;รันซ้ำได้&quot; โดยไม่ error
+-- ═══════════════════════════════════════════════════════════
+
+PRAGMA foreign_keys = ON;
+
+-- TODO ①  ลบตารางเดิมก่อน เพื่อให้รันไฟล์นี้ซ้ำได้
+--         ⚠ ลำดับสำคัญ — ต้องลบตารางที่มี foreign key ก่อน
+--         คำใบ้: DROP TABLE IF EXISTS ...
+DROP TABLE IF EXISTS requests;
+DROP TABLE IF EXISTS users;
+
+-- TODO ②  สร้างตาราง users
+--         ต้องมี: id (PK, INTEGER, AUTOINCREMENT)
+--                name (TEXT, ห้ามว่าง)
+--                department (TEXT, ห้ามว่าง)
+--                email (TEXT, ห้ามว่าง, ห้ามซ้ำ)
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  department TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE
+);
+
+-- TODO ③  สร้างตาราง requests
+--         ต้องมี: id (PK, TEXT — ใช้รหัสแบบ REQ-001)
+--                requester_id (INTEGER, ห้ามว่าง, ชี้ไป users(id))
+--                request_type (TEXT, ห้ามว่าง, จำกัดค่าด้วย CHECK)
+--                location, details (TEXT, ห้ามว่าง)
+--                priority (ค่าเริ่มต้น &#039;normal&#039;, จำกัดด้วย CHECK)
+--                status (ค่าเริ่มต้น &#039;pending&#039;, จำกัดด้วย CHECK)
+--                created_at (ค่าเริ่มต้นเป็นเวลาปัจจุบัน)
+--
+--         ⚠ อย่าลืม FOREIGN KEY — เป็นหัวใจของสัปดาห์นี้
+CREATE TABLE requests (
+  id TEXT PRIMARY KEY,
+  requester_id INTEGER NOT NULL,
+
+  request_type TEXT NOT NULL
+    CHECK (
+      request_type IN (
+        &#039;แจ้งซ่อม&#039;,
+        &#039;บริการบัญชีผู้ใช้&#039;,
+        &#039;ขอใช้อุปกรณ์&#039;,
+        &#039;อื่น ๆ&#039;
+      )
+    ),
+
+  location TEXT NOT NULL,
+
+  details TEXT NOT NULL,
+
+  priority TEXT NOT NULL DEFAULT &#039;normal&#039;
+    CHECK (
+      priority IN (&#039;normal&#039;, &#039;urgent&#039;)
+    ),
+
+  status TEXT NOT NULL DEFAULT &#039;pending&#039;
+    CHECK (
+      status IN (
+        &#039;pending&#039;,
+        &#039;in-progress&#039;,
+        &#039;completed&#039;
+      )
+    ),
+
+  created_at TEXT NOT NULL
+    DEFAULT (datetime(&#039;now&#039;,&#039;localtime&#039;)),
+
+  FOREIGN KEY (requester_id)
+    REFERENCES users(id)
+);
+
+-- TODO ④  ใส่ข้อมูลตั้งต้น
+--         users อย่างน้อย 4 คน · requests อย่างน้อย 5 รายการ
+INSERT INTO users (name, department, email)
+VALUES
+  (&#039;สมชาย ใจดี&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;somchai@rmutl.ac.th&#039;),
+
+  (&#039;สุภาวดี รักเรียน&#039;,
+   &#039;วิศวกรรมซอฟต์แวร์&#039;,
+   &#039;supawadee@rmutl.ac.th&#039;),
+
+  (&#039;ธนกฤต ตั้งใจ&#039;,
+   &#039;วิศวกรรมไฟฟ้า&#039;,
+   &#039;thanakrit@rmutl.ac.th&#039;),
+
+  (&#039;ปรียา ขยันยิ่ง&#039;,
+   &#039;สำนักวิทยบริการ&#039;,
+   &#039;preeya@rmutl.ac.th&#039;);
+
+-- TODO ④ ใส่ข้อมูลตั้งต้น
+-- requests อย่างน้อย 5 รายการ
+
+INSERT INTO requests (
+  id,
+  requester_id,
+  request_type,
+  location,
+  details,
+  priority,
+  status
+)
+VALUES
+  (
+    &#039;REQ-001&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 301&#039;,
+    &#039;เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-002&#039;,
+    2,
+    &#039;บริการบัญชีผู้ใช้&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;เข้าสู่ระบบห้องปฏิบัติการไม่ได้&#039;,
+    &#039;normal&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-003&#039;,
+    3,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องประชุม 2&#039;,
+    &#039;ขอยืมโปรเจกเตอร์&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  ),
+  (
+    &#039;REQ-004&#039;,
+    1,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 302&#039;,
+    &#039;คอมพิวเตอร์เครื่องที่ 5 เปิดไม่ติด&#039;,
+    &#039;urgent&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-005&#039;,
+    4,
+    &#039;อื่น ๆ&#039;,
+    &#039;ห้องสมุด ชั้น 2&#039;,
+    &#039;ขอเพิ่มปลั๊กไฟบริเวณโต๊ะอ่านหนังสือ&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-006&#039;,
+    2,
+    &#039;แจ้งซ่อม&#039;,
+    &#039;ห้องปฏิบัติการ 401&#039;,
+    &#039;ไฟในห้องกะพริบตลอดเวลา&#039;,
+    &#039;normal&#039;,
+    &#039;pending&#039;
+  ),
+  (
+    &#039;REQ-007&#039;,
+    3,
+    &#039;อื่น ๆ&#039;,
+    &#039;อาคารวิศวกรรม&#039;,
+    &#039;ขอเพิ่มจุดเชื่อมต่ออินเทอร์เน็ต&#039;,
+    &#039;urgent&#039;,
+    &#039;in-progress&#039;
+  ),
+  (
+    &#039;REQ-008&#039;,
+    4,
+    &#039;ขอใช้อุปกรณ์&#039;,
+    &#039;ห้องสมุด ชั้น 1&#039;,
+    &#039;ขอยืมอุปกรณ์สำหรับนำเสนอ&#039;,
+    &#039;normal&#039;,
+    &#039;completed&#039;
+  );</pre></details><details><summary>queries.sql</summary><pre>-- ═══════════════════════════════════════════════════════════
+-- queries.sql — คำสั่งค้นหาตอบโจทย์
+-- 🏠 TODO W09-QUERY (CP22) · เขียนอย่างน้อย 8 ข้อ
+--
+-- เขียนคำสั่งจริงที่รันได้ ไม่ใช่เขียนบรรยาย
+-- ทุกข้อต้องทดสอบแล้วว่าได้ผลลัพธ์ถูกต้อง
+-- ═══════════════════════════════════════════════════════════
+
+-- ① คำร้องทั้งหมด เรียงตามรหัส
+SELECT *
+FROM requests
+ORDER BY id;
+
+-- ② คำร้องที่ยังไม่ได้ดำเนินการ (status = &#039;pending&#039;)
+SELECT id, location, details, status
+FROM requests
+WHERE status = &#039;pending&#039;
+ORDER BY id;
+
+-- ③ คำร้องเร่งด่วนที่ยังไม่เสร็จ — ใช้เงื่อนไข 2 ข้อพร้อมกัน
+SELECT id, location, priority, status
+FROM requests
+WHERE priority = &#039;urgent&#039;
+  AND status &lt;&gt; &#039;completed&#039;
+ORDER BY id;
+
+-- ④ ค้นคำร้องจากคำบางส่วนในรายละเอียด  (คำใบ้: LIKE)
+SELECT id, details
+FROM requests
+WHERE details LIKE &#039;%ไฟ%&#039;
+ORDER BY id;
+
+-- ⑤ คำร้องพร้อมชื่อผู้แจ้ง  ← ต้องใช้ JOIN เพราะชื่ออยู่คนละตาราง
+SELECT
+  r.id,
+  u.name AS requesterName,
+  r.request_type,
+  r.location,
+  r.status
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+ORDER BY r.id;
+
+-- ⑥ คำร้องเฉพาะของภาควิชาหนึ่ง  (JOIN + WHERE)
+SELECT
+  r.id,
+  u.name AS requesterName,
+  u.department,
+  r.request_type,
+  r.location,
+  r.status
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+WHERE u.department = &#039;วิศวกรรมซอฟต์แวร์&#039;
+ORDER BY r.id;
+
+-- ⑦ รายชื่อผู้แจ้งที่ไม่ซ้ำกัน  (คำใบ้: DISTINCT)
+SELECT DISTINCT
+  u.name AS requesterName
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+ORDER BY requesterName;
+
+-- ⑧ คำร้อง 3 รายการล่าสุด  (คำใบ้: ORDER BY + LIMIT)
+SELECT
+  id,
+  location,
+  status,
+  created_at
+FROM requests
+ORDER BY created_at DESC, id DESC
+LIMIT 3;
+
+-- ⭐ Challenge ─────────────────────────────────────────────
+-- ⑨ นับจำนวนคำร้องแยกตามสถานะ  (GROUP BY + COUNT)
+-- ⑩ ใครแจ้งคำร้องมากที่สุด  (คำใบ้: LEFT JOIN เพื่อให้คนที่ยังไม่เคยแจ้งติดมาด้วย)
+-- ⑪ สร้าง INDEX ให้การค้นด้วย status เร็วขึ้น
+</pre></details><details><summary>DATA_MODEL.md</summary><pre># DATA_MODEL.md — การออกแบบฐานข้อมูล Campus Service Request
+
+---
+
+## 1. ภาพรวม
+
+```text
+users                              requests
+-----------------                  -----------------
+id (PK)                            id (PK)
+name                               requester_id (FK)
+department                         request_type
+email                              location
+                                   details
+                                   priority
+                                   status
+                                   created_at
+
+users.id  1  ----------------  หลาย  requests.requester_id
+```
+
+จากที่ออกแบบ ตาราง `users` กับ `requests` เป็นความสัมพันธ์แบบ **หนึ่งต่อหลาย (One-to-Many)** เพราะ user 1 คนสามารถมีคำร้องได้หลายคำร้อง โดยใช้ `requester_id` ในตาราง `requests` เชื่อมกับ `id` ของตาราง `users`
+
+---
+
+## 2. ทำไมต้องแยกเป็น 2 ตาราง
+
+ตอน Week 06–07 เราเก็บ `requesterName` เป็นข้อความไว้ในคำร้องแต่ละรายการ วิธีนี้ใช้งานได้ตอนที่ข้อมูลยังไม่เยอะ แต่ถ้าผู้ใช้คนเดิมส่งคำร้องหลายครั้ง ชื่อของเขาก็จะถูกเก็บซ้ำอยู่หลายรายการ
+
+ตัวอย่างเช่น ถ้าสมชายมีคำร้อง 20 รายการ แล้วสมชายเปลี่ยนชื่อ เราจะต้องตามแก้ชื่อในคำร้องทั้ง 20 รายการ ถ้าแก้ไม่ครบก็อาจทำให้บางรายการเป็นชื่อเก่าและบางรายการเป็นชื่อใหม่ ทำให้ข้อมูลไม่ตรงกัน
+
+พอแยกข้อมูลออกเป็นตาราง `users` และ `requests` ข้อมูลของสมชายจะถูกเก็บไว้เพียงครั้งเดียวในตาราง `users` ส่วนใน `requests` จะเก็บแค่ `requester_id` เพื่อบอกว่าคำร้องนั้นเป็นของใคร
+
+ดังนั้นถ้าสมชายเปลี่ยนชื่อ เราแก้แค่ 1 จุดในตาราง `users` คำร้องเดิมทั้งหมดก็ยังเชื่อมไปหาผู้ใช้คนเดิมได้เหมือนเดิม วิธีนี้ช่วยลดข้อมูลซ้ำและลดโอกาสที่ข้อมูลจะไม่ตรงกัน
+
+---
+
+## 3. รายละเอียดตาราง
+
+### ตาราง `users`
+
+| คอลัมน์ | ชนิด | ข้อกำหนด | เหตุผล |
+|---|---|---|---|
+| `id` | INTEGER | PRIMARY KEY, AUTOINCREMENT | ใช้เป็นรหัสผู้ใช้ภายในระบบ และให้ฐานข้อมูลสร้างหมายเลขต่อไปให้อัตโนมัติ |
+| `name` | TEXT | NOT NULL | ผู้ใช้ทุกคนต้องมีชื่อ จึงไม่ควรปล่อยว่าง |
+| `department` | TEXT | NOT NULL | ใช้บอกสาขาหรือหน่วยงานของผู้ใช้ และจำเป็นต่อการนำข้อมูลไปใช้งาน |
+| `email` | TEXT | NOT NULL, UNIQUE | ผู้ใช้ต้องมีอีเมล และไม่ควรมีผู้ใช้สองคนที่ใช้อีเมลเดียวกัน |
+
+### ตาราง `requests`
+
+| คอลัมน์ | ชนิด | ข้อกำหนด | เหตุผล |
+|---|---|---|---|
+| `id` | TEXT | PRIMARY KEY | ใช้รหัสรูปแบบ `REQ-001` ทำให้อ่านและเข้าใจได้ง่ายกว่าตัวเลขอย่างเดียว |
+| `requester_id` | INTEGER | NOT NULL, FOREIGN KEY | ใช้เชื่อมคำร้องกับผู้ใช้ในตาราง `users` |
+| `request_type` | TEXT | NOT NULL, CHECK | จำกัดประเภทคำร้องให้อยู่ในค่าที่ระบบรองรับ |
+| `location` | TEXT | NOT NULL | คำร้องต้องระบุสถานที่เพื่อให้รู้ว่าปัญหาเกิดที่ไหน |
+| `details` | TEXT | NOT NULL | ใช้เก็บรายละเอียดของปัญหาหรือสิ่งที่ผู้ใช้ต้องการ |
+| `priority` | TEXT | NOT NULL, DEFAULT `normal`, CHECK | ถ้าไม่ได้ระบุความเร่งด่วนให้ใช้ `normal` และป้องกันค่าที่ระบบไม่รองรับ |
+| `status` | TEXT | NOT NULL, DEFAULT `pending`, CHECK | คำร้องใหม่เริ่มต้นเป็น `pending` และจำกัดสถานะให้อยู่ในค่าที่กำหนด |
+| `created_at` | TEXT | NOT NULL, DEFAULT เวลาปัจจุบัน | บันทึกเวลาที่สร้างคำร้องโดยอัตโนมัติ |
+
+---
+
+## 4. เหตุผลของการเลือกชนิดและข้อกำหนด
+
+### ทำไม `users.id` กับ `requests.id` ใช้ชนิดต่างกัน
+
+`users.id` ใช้ `INTEGER` และ `AUTOINCREMENT` เพราะเป็นรหัสภายในฐานข้อมูล เราไม่ได้จำเป็นต้องให้ผู้ใช้อ่านหรือจำรหัสนี้ จึงให้ SQLite สร้างหมายเลขต่อไปให้อัตโนมัติ เช่น `1`, `2`, `3`, `4`
+
+ส่วน `requests.id` ใช้ `TEXT` เพราะรูปแบบรหัสคำร้องของระบบเป็น `REQ-001`, `REQ-002` เป็นต้น รหัสแบบนี้ช่วยให้ดูแล้วรู้ทันทีว่าเป็นรหัสคำร้อง และสามารถนำไปแสดงให้ผู้ใช้เห็นได้ง่ายกว่าตัวเลขอย่างเดียว
+
+### ทำไมต้องมี CHECK constraint ทั้งที่ API ก็ตรวจข้อมูลอยู่แล้ว
+
+ถึงแม้ API จะตรวจข้อมูลก่อนบันทึก แต่ฐานข้อมูลก็ควรตรวจข้อมูลอีกชั้นหนึ่ง เพราะข้อมูลอาจไม่ได้เข้ามาทาง API อย่างเดียว เช่น อาจมีการใช้ SQL เพิ่มหรือแก้ข้อมูลโดยตรง
+
+ถ้ามีแค่การตรวจที่ API อย่างเดียว แล้วมีข้อมูลถูกเพิ่มจากช่องทางอื่น ก็อาจมีค่าที่ระบบไม่รองรับหลุดเข้าไปในฐานข้อมูลได้
+
+ตัวอย่างเช่น `status` ของระบบกำหนดไว้เพียง
+
+```text
+pending
+in-progress
+completed
+```
+
+ถ้ามีคนพยายามบันทึกค่าอย่าง `cancelled` หรือค่าอื่นที่ไม่ได้กำหนดไว้ `CHECK` constraint จะไม่ยอมให้ข้อมูลนั้นถูกบันทึกลงฐานข้อมูล
+
+ดังนั้นการตรวจที่ API ช่วยตรวจข้อมูลก่อนส่งเข้าฐานข้อมูล ส่วน `CHECK` constraint เป็นการป้องกันข้อมูลผิดที่ระดับฐานข้อมูลอีกชั้นหนึ่ง
+
+---
+
+## 5. ตัวอย่างการใช้ JOIN
+
+ตัวอย่างการนำข้อมูลคำร้องมาแสดงพร้อมชื่อผู้แจ้ง
+
+```sql
+SELECT
+  r.id,
+  u.name AS requesterName,
+  r.request_type,
+  r.status
+FROM requests AS r
+JOIN users AS u
+  ON r.requester_id = u.id
+ORDER BY r.id;
+```
+
+ตัวอย่างผลลัพธ์ที่ได้
+
+| id | requesterName | request_type | status |
+|---|---|---|---|
+| REQ-001 | สมชาย ใจดี | แจ้งซ่อม | pending |
+| REQ-002 | สุภาวดี รักเรียน | บริการบัญชีผู้ใช้ | in-progress |
+| REQ-003 | ธนกฤต ตั้งใจ | ขอใช้อุปกรณ์ | completed |
+| REQ-004 | สมชาย ใจดี | แจ้งซ่อม | pending |
+| REQ-005 | ปรียา ขยันยิ่ง | อื่น ๆ | pending |
+| REQ-006 | สุภาวดี รักเรียน | แจ้งซ่อม | pending |
+| REQ-007 | ธนกฤต ตั้งใจ | อื่น ๆ | in-progress |
+| REQ-008 | ปรียา ขยันยิ่ง | ขอใช้อุปกรณ์ | completed |
+
+คำสั่ง `JOIN` ทำให้เราสามารถเก็บเพียง `requester_id` ในตาราง `requests` แต่ตอนนำข้อมูลมาใช้งานก็ยังสามารถดึงชื่อจริงของผู้แจ้งจากตาราง `users` ได้
+
+---
+
+## 6. ข้อสังเกตสำหรับสัปดาห์ที่ 10
+
+ตอน Week 07 ข้อมูลที่ API ส่งให้ React มีข้อมูลอย่าง `requesterName` อยู่ในแต่ละคำร้อง ทำให้ฝั่ง React สามารถนำชื่อไปแสดงได้ทันที
+
+แต่หลังจากแยกฐานข้อมูลใน Week 09 ตาราง `requests` ไม่ได้เก็บ `requesterName` โดยตรงแล้ว แต่เก็บ `requester_id` แทน
+
+เมื่อใช้ `JOIN` ระหว่าง `requests` กับ `users` เราสามารถดึงชื่อผู้แจ้งกลับมาได้อีกครั้ง ผลลัพธ์จึงมีลักษณะใกล้กับข้อมูลที่ API เคยส่งให้ React ใน Week 07
+
+สิ่งที่สังเกตได้คือ ฐานข้อมูลไม่จำเป็นต้องเก็บข้อมูลทุกอย่างซ้ำในตารางเดียว เราสามารถแยกข้อมูลออกเป็นหลายตารางให้เหมาะสม แล้วใช้ `JOIN` ตอนที่ต้องการนำข้อมูลมารวมกันเพื่อส่งให้ API หรือแสดงบนหน้าเว็บได้</pre></details></section>
+    <footer>ENGSE203 · week-09 · engse203-student-labs-68543210078</footer></main></body></html>

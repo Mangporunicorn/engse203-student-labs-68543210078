@@ -10,7 +10,11 @@
   "testStatus": "pass",
   "notes": "นำ Vite build output ที่มี index.html เข้า publish/",
   "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-02/",
-  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-02/labs/week-02/source",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-02/source",
+  "evidenceUrls": [
+    "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-02/evidence"
+  ],
   "hasPublish": true,
+  "hasDemo": false,
   "sourceEntries": 12
 }

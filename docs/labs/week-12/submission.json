@@ -1,0 +1,32 @@
+{
+  "week": "week-12",
+  "title": "Testing & Debugging",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-12/source",
+  "sourceRef": "main",
+  "evidencePaths": [],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "lab-12-submission-v1",
+  "testStatus": "pass",
+  "testSummary": "งานหลัก 20/20",
+  "notes": "Vitest unit/integration tests, test cases ค่าขอบ และบันทึกการแก้ 4 bugs พร้อม regression tests",
+  "documents": [
+    "labs/week-12/source/README.md",
+    "labs/week-12/source/API_CONTRACT.md",
+    "labs/week-12/source/DATABASE_CHOICES.md",
+    "labs/week-12/source/TEST_CASES.md",
+    "labs/week-12/source/DEBUG_LOG.md",
+    "labs/week-12/source/BUG_REPORTS.md"
+  ],
+  "frontendPath": "labs/week-12/source/frontend",
+  "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-12/",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-12/source",
+  "evidenceUrls": [],
+  "hasPublish": false,
+  "hasDemo": true,
+  "sourceEntries": 17
+}

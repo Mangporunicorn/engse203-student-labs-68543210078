@@ -14,7 +14,10 @@
     "build:pages": "node scripts/build-pages.mjs",
     "verify:setup": "node scripts/verify-repository.mjs --setup",
     "verify": "node scripts/verify-repository.mjs",
-    "verify:lab": "node scripts/verify-repository.mjs --week"
+    "verify:lab": "node scripts/verify-repository.mjs --week",
+    "build:pages:demos": "node scripts/build-pages-demos.mjs",
+    "build:pages:midterm": "node scripts/build-midterm-pages.mjs",
+    "verify:pages": "node scripts/verify-pages.mjs"
   },
   "dependencies": {
     "ci": "^2.3.0",

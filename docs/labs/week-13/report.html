@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#092746"><title>week-13 — Quality &amp; Security</title><style>*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;line-height:1.65;color:#10253d;background:#eaf1f7}header{padding:38px max(22px,calc((100% - 1160px)/2));color:#fff;background:linear-gradient(135deg,#071f39,#0d4c77 72%,#078386)}header p{margin:8px 0;color:#cfe4f3}h1,h2,h3{line-height:1.35}header h1{margin:10px 0;font-size:clamp(30px,5vw,48px)}a{color:#075ea8}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #d58710;outline-offset:4px}main{max-width:1160px;margin:auto;padding:26px 22px 48px}.profile,.links,.stats{display:flex;flex-wrap:wrap;gap:10px}.profile span{padding:5px 10px;border:1px solid #ffffff40;border-radius:99px;background:#ffffff12}.notice{padding:15px 18px;border-left:5px solid #d5a223;border-radius:8px;background:#fff8e6}.labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;margin-top:24px}.lab-card,.panel{padding:22px;border:1px solid #c4d6e4;border-radius:14px;background:#fff;box-shadow:0 8px 22px #09274609}.lab-card{display:flex;flex-direction:column;border-top:4px solid #1261a6}.lab-card h2{font-size:21px;margin:15px 0 8px}.lab-card .links{margin-top:auto;padding-top:16px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.week{font-weight:800;color:#1261a6}.pill{padding:4px 9px;border-radius:99px;background:#e7f3ed;font-size:12px;color:#196644;font-weight:700}.links a{display:inline-block;padding:8px 12px;border:1px solid #9fb8cc;border-radius:8px;color:#0b527f;text-decoration:none;background:#fff}.links a.primary{color:#fff;border-color:#1261a6;background:#1261a6}.muted,small{color:#52677c}header small{color:#cfe4f3}.panel{margin:20px 0}.stats{margin:18px 0}.stats span{padding:10px 14px;background:#f1f6fa;border-radius:9px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}.gallery figure{margin:0;border:1px solid #d6e2ec;border-radius:10px;overflow:hidden}.gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#f2f5f8}.gallery figcaption{padding:10px;overflow-wrap:anywhere;font-size:13px}details{margin:12px 0;border:1px solid #cbdbe7;border-radius:9px;padding:12px 16px}summary{cursor:pointer;font-weight:700;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:14px;color:#233c54}code{overflow-wrap:anywhere}footer{margin-top:26px;color:#52677c;font-size:13px}.report-intro{max-width:850px}.lab-card p{margin:6px 0 12px}.version{font-size:12px;margin-top:12px}@media(max-width:560px){header{padding-top:26px}.panel,.lab-card{padding:18px}main{padding:18px 14px 36px}}</style></head><body><header><small>ENGSE203 · week-13</small><h1>Quality &amp; Security</h1><p>68543210078 · SEC1</p></header><main><p><a href="../../index.html">← กลับหน้า Portfolio</a></p><section class="panel report-intro"><span class="pill">LAB Portfolio</span><h2>รายละเอียดผลงาน</h2><p>Validation, scrypt password hashing, JWT login, 401/403 และ fail-fast configuration พร้อมการทดสอบ</p>
+    <div class="stats"><span>ผลตรวจ: <strong>งานหลัก 23/23</strong></span><span>Version: <code>lab-13-submission-v1</code></span></div>
+    <p class="notice">เดโมนี้ใช้ข้อมูลในเบราว์เซอร์ แยกจาก API และฐานข้อมูลจริง ดูการทำงานฝั่งเซิร์ฟเวอร์และผลทดสอบได้จาก Source Code และหลักฐานด้านล่าง</p><div class="links"><a class="primary" href="app/">ทดลองแอป</a><a href="https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-13/source">Source Code</a></div></section>
+
+    <section class="panel"><h2>เอกสารและผลการทดสอบ</h2><details><summary>README.md</summary><pre># Campus Service — ระบบ Full-Stack (ENGSE203 Week 11)
+
+ระบบรับคำร้องขอใช้บริการภายในมหาวิทยาลัย · **React + Express API + SQLite** ทำงานครบวงจร
+
+## สถาปัตยกรรม 3 ชั้น
+
+```
+┌─────────────┐   HTTP    ┌──────────────┐   SQL    ┌───────────┐
+│  React      │ ────────► │  Express API │ ───────► │  SQLite   │
+│  (frontend) │ ◄──────── │  (api)       │ ◄─────── │  campus.db│
+└─────────────┘   JSON    └──────────────┘   rows   └───────────┘
+   พอร์ต 5173              พอร์ต 3001              ไฟล์ในเครื่อง
+```
+
+| ชั้น | หน้าที่ | โฟลเดอร์ |
+|---|---|---|
+| Frontend | หน้าจอผู้ใช้ · เรียก API | `frontend/` |
+| API | route · controller · service | `api/src/` |
+| Database | เก็บข้อมูลถาวร | `api/data/campus.db` |
+
+## วิธีรัน (development)
+
+```bash
+# ชั้นฐานข้อมูล + API
+cd api
+npm install
+cp .env.example .env
+npm run db:setup      # สร้าง campus.db จาก schema.sql
+npm run dev           # API ที่ http://localhost:3001
+
+# ชั้น frontend (อีก terminal)
+cd frontend
+npm install
+npm run dev           # React ที่ http://localhost:5173
+```
+
+## วิธีรัน (production)
+
+```bash
+# build แบบเดียวกับ cloud (script อยู่ใน package.json ระดับบนสุด)
+NODE_ENV=production npm install
+NODE_ENV=production npm run build
+
+# start — เสิร์ฟทั้งหน้าเว็บและ API จากพอร์ตเดียว
+NODE_ENV=production PORT=10000 npm start
+# เปิด http://localhost:10000
+```
+
+| ไฟล์ | ทำให้ production ทำงานอย่างไร |
+|---|---|
+| `frontend/.env.production` | `VITE_API_BASE_URL=` ว่าง → frontend เรียก `/api/...` บนโดเมนเดียวกัน |
+| `api/src/app.js` | production เสิร์ฟ `frontend/dist` · path ที่ไม่ใช่ `/api` ได้ index.html |
+| `package.json` | `build` ใช้ `--include=dev` เพราะ cloud ตั้ง NODE_ENV=production ตั้งแต่ build |
+
+## Live Demo
+
+🔗 (ใส่ URL หลัง deploy ขึ้น Render)
+
+หมายเหตุ: Render free tier — เปิดครั้งแรกช้า 30–60 วินาที · ข้อมูลที่เพิ่มจะกลับเป็นค่าตั้งต้นเมื่อ restart
+
+## ตรวจสุขภาพระบบ
+
+```bash
+curl http://localhost:3001/api/health
+# { &quot;status&quot;: &quot;ok&quot;, &quot;env&quot;: &quot;...&quot;, &quot;database&quot;: { &quot;connected&quot;: true, ... } }
+```
+
+## Environment Variables
+
+| ตัวแปร | ค่าเริ่มต้น | ความหมาย |
+|---|---|---|
+| `NODE_ENV` | development | สภาพแวดล้อม |
+| `PORT` | 3001 | พอร์ต API |
+| `CORS_ORIGIN` | http://localhost:5173 | ที่อยู่ frontend ที่อนุญาต |
+| `DB_FILE` | api/data/campus.db | ไฟล์ฐานข้อมูล |
+
+## API Endpoints
+
+ดู `API_CONTRACT.md` สำหรับรายละเอียดครบ · สรุป: `GET/POST/PUT/DELETE /api/requests` · `GET /api/health`
+
+## การตัดสินใจด้านการออกแบบ
+
+- **แยก 3 ชั้นชัดเจน** — เปลี่ยนแหล่งข้อมูลได้โดยกระทบชั้นเดียว (พิสูจน์มา 4 ครั้งใน Week 05–10)
+- **เลือก SQLite** — ข้อมูลมีโครงและความสัมพันธ์ชัด · ดู `DATABASE_CHOICES.md`
+- **config รวมศูนย์** — ไม่ hardcode · แยก dev/production ด้วย `NODE_ENV`
+
+## การทดสอบ (สัปดาห์ 12)
+
+```bash
+npm install --prefix api &amp;&amp; npm install --prefix frontend
+npm test                 # api (Vitest) + frontend (Vitest)
+npm run coverage         # รายงานว่าบรรทัดไหนยังไม่มี test วิ่งผ่าน → api/coverage/index.html
+```
+
+| โฟลเดอร์ | ชนิด test | ทดสอบอะไร |
+|---|---|---|
+| `api/tests/unit/` | unit | pure function เช่น `validators/requestValidator.js` — ไม่ต้องเปิด server |
+| `api/tests/integration/` | integration | ยิง HTTP จริงผ่านทุกชั้น ด้วย supertest บนฐานข้อมูลในหน่วยความจำ (`DB_FILE=:memory:`) |
+| `frontend/src/**/*.test.js` | unit | pure function ฝั่ง React เช่น `utils/requestSummary.js` |
+
+หลักฐานการไล่ปัญหา: `BUG_REPORTS.md` (อาการที่ผู้ใช้แจ้ง) · `DEBUG_LOG.md` (สาเหตุและวิธีแก้) · `TEST_CASES.md` (ตารางกรณีทดสอบ)
+
+
+## ความปลอดภัย (สัปดาห์ 13)
+
+| เรื่อง | ไฟล์ |
+|---|---|
+| validation เข้มขึ้น (ชนิดข้อมูล · ความยาวสูงสุด · body ≤ 10kb) | `api/src/validators/requestValidator.js` · `api/src/app.js` |
+| รหัสผ่านเก็บเป็น hash (scrypt) | `api/src/utils/password.js` |
+| เข้าสู่ระบบด้วย JWT | `api/src/services/authService.js` · `POST /api/auth/login` |
+| สิทธิ์: GET/POST ทุกคน · PUT/DELETE เฉพาะเจ้าหน้าที่ | `api/src/middleware/auth.js` · `api/src/routes/requestRoutes.js` |
+| secret มาจาก env · production ไม่มี secret = ไม่ start | `api/src/config.js` · `api/.env.example` |
+
+**บัญชีเจ้าหน้าที่สำหรับพัฒนา** — `staff@rmutl.ac.th` / `staff1234` (อยู่ใน schema.sql เป็น hash)
+⚠ ก่อนใช้งานจริง: สร้างบัญชีใหม่ด้วย `npm run create-staff --prefix api -- &lt;อีเมล&gt; &lt;รหัสผ่าน&gt;` และตั้ง `JWT_SECRET` ใน Environment ของ Render
+
+```bash
+curl -X POST localhost:3001/api/auth/login -H &quot;Content-Type: application/json&quot; \
+  -d &#039;{&quot;email&quot;:&quot;staff@rmutl.ac.th&quot;,&quot;password&quot;:&quot;staff1234&quot;}&#039;
+# → { &quot;token&quot;: &quot;eyJ...&quot;, &quot;user&quot;: { ... } }
+
+curl -X PUT localhost:3001/api/requests/REQ-001 -H &quot;Authorization: Bearer &lt;token&gt;&quot; \
+  -H &quot;Content-Type: application/json&quot; -d &#039;{&quot;status&quot;:&quot;completed&quot;}&#039;
+```
+</pre></details><details><summary>API_CONTRACT.md</summary><pre># API Contract — Campus Service Request API
+
+**เวอร์ชัน:** 2.0.0 · **Base URL:** `http://localhost:3001`
+**รูปแบบข้อมูล:** JSON (`Content-Type: application/json`)
+
+&gt; **API Contract คืออะไร** — ข้อตกลงระหว่างคนทำ front-end กับคนทำ back-end
+&gt; ว่าจะคุยกันด้วย endpoint อะไร ส่งอะไรไป ได้อะไรกลับ
+&gt; มีไว้เพื่อให้สองฝั่ง**ทำงานคู่ขนานกันได้** โดยไม่ต้องรอกัน
+
+---
+
+## โครงสร้างข้อมูล Request
+
+| field | ชนิด | คำอธิบาย | ตัวอย่าง |
+|---|---|---|---|
+| `id` | string | รหัสคำร้อง · ขึ้นต้นด้วย `REQ-` · เซิร์ฟเวอร์สร้างให้ | `&quot;REQ-001&quot;` |
+| `requesterName` | string | ชื่อผู้แจ้ง · อย่างน้อย 2 ตัวอักษร | `&quot;สมชาย ใจดี&quot;` |
+| `requestType` | string | ประเภท · 1 ใน 4 ค่าที่กำหนด | `&quot;แจ้งซ่อม&quot;` |
+| `location` | string | สถานที่ · ห้ามว่าง | `&quot;ห้องปฏิบัติการ 301&quot;` |
+| `details` | string | รายละเอียด · อย่างน้อย 10 ตัวอักษร | `&quot;เครื่องปรับอากาศไม่ทำงาน&quot;` |
+| `priority` | string | `&quot;normal&quot;` หรือ `&quot;urgent&quot;` | `&quot;urgent&quot;` |
+| `status` | string | `&quot;pending&quot;` · `&quot;in-progress&quot;` · `&quot;completed&quot;` | `&quot;pending&quot;` |
+
+**ค่าที่ยอมรับของ `requestType`** — `แจ้งซ่อม` · `บริการบัญชีผู้ใช้` · `ขอใช้อุปกรณ์` · `อื่น ๆ`
+
+---
+
+## Endpoints
+
+| Method | Endpoint | คำอธิบาย | Request body | สำเร็จ | ผิดพลาด |
+|---|---|---|---|---|---|
+| `GET` | `/api/requests` | ดูคำร้องทั้งหมด | — | `200` + array | — |
+| `GET` | `/api/requests?status=` | กรองตามสถานะ | — | `200` + array | — |
+| `GET` | `/api/requests/:id` | ดูคำร้องใบเดียว | — | `200` + object | `404` ไม่พบ |
+| `POST` | `/api/requests` | สร้างคำร้องใหม่ | Request (ไม่ต้องมี `id`, `status`) | `201` + object ที่สร้าง | `400` ข้อมูลไม่ถูกต้อง |
+| `PUT` | `/api/requests/:id` | เปลี่ยนสถานะ | `{ &quot;status&quot;: &quot;...&quot; }` | `200` + object ที่แก้แล้ว | `400` สถานะผิด · `404` ไม่พบ |
+| `DELETE` | `/api/requests/:id` | ลบคำร้อง | — | `204` ไม่มี body | `404` ไม่พบ |
+
+---
+
+## ตัวอย่างการเรียกใช้
+
+### GET /api/requests
+
+```http
+GET /api/requests HTTP/1.1
+Host: localhost:3001
+```
+
+```json
+[
+  {
+    &quot;id&quot;: &quot;REQ-001&quot;,
+    &quot;requesterName&quot;: &quot;สมชาย ใจดี&quot;,
+    &quot;requestType&quot;: &quot;แจ้งซ่อม&quot;,
+    &quot;location&quot;: &quot;ห้องปฏิบัติการ 301&quot;,
+    &quot;details&quot;: &quot;เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า&quot;,
+    &quot;priority&quot;: &quot;urgent&quot;,
+    &quot;status&quot;: &quot;pending&quot;
+  }
+]
+```
+
+### POST /api/requests
+
+```http
+POST /api/requests HTTP/1.1
+Content-Type: application/json
+
+{
+  &quot;requesterName&quot;: &quot;สุภาวดี รักเรียน&quot;,
+  &quot;requestType&quot;: &quot;ขอใช้อุปกรณ์&quot;,
+  &quot;location&quot;: &quot;ห้องประชุม 2&quot;,
+  &quot;details&quot;: &quot;ขอยืมโปรเจกเตอร์สำหรับนำเสนอ&quot;,
+  &quot;priority&quot;: &quot;normal&quot;
+}
+```
+
+**201 Created**
+
+```json
+{
+  &quot;id&quot;: &quot;REQ-MTYOA3MX-YEX9&quot;,
+  &quot;requesterName&quot;: &quot;สุภาวดี รักเรียน&quot;,
+  &quot;requestType&quot;: &quot;ขอใช้อุปกรณ์&quot;,
+  &quot;location&quot;: &quot;ห้องประชุม 2&quot;,
+  &quot;details&quot;: &quot;ขอยืมโปรเจกเตอร์สำหรับนำเสนอ&quot;,
+  &quot;priority&quot;: &quot;normal&quot;,
+  &quot;status&quot;: &quot;pending&quot;
+}
+```
+
+**400 Bad Request** — เมื่อข้อมูลไม่ถูกต้อง
+
+```json
+{
+  &quot;error&quot;: &quot;ข้อมูลคำร้องไม่ถูกต้อง&quot;,
+  &quot;details&quot;: [
+    &quot;ชื่อผู้แจ้งต้องมีอย่างน้อย 2 ตัวอักษร&quot;,
+    &quot;รายละเอียดต้องมีอย่างน้อย 10 ตัวอักษร&quot;
+  ]
+}
+```
+
+### PUT /api/requests/:id
+
+```http
+PUT /api/requests/REQ-001 HTTP/1.1
+Content-Type: application/json
+
+{ &quot;status&quot;: &quot;in-progress&quot; }
+```
+
+**200 OK** — คืนคำร้องที่อัปเดตแล้ว
+
+### DELETE /api/requests/:id
+
+**204 No Content** — ไม่มี body ส่งกลับ
+
+---
+
+## รูปแบบ Error
+
+ทุก error ตอบเป็น JSON ที่มี field `error` เสมอ
+
+```json
+{ &quot;error&quot;: &quot;ข้อความที่ผู้ใช้ทั่วไปอ่านเข้าใจ&quot; }
+```
+
+กรณี validation จะมี `details` เพิ่มมาเป็น array บอกว่าผิดตรงไหนบ้าง
+
+| Status | เมื่อไหร่ | ฝั่งไหนผิด |
+|---|---|---|
+| `400` | ข้อมูลที่ส่งมาไม่ถูกต้อง | ผู้ใช้ |
+| `404` | ไม่พบทรัพยากรที่ขอ | ผู้ใช้ |
+| `500` | โค้ดเซิร์ฟเวอร์ผิดพลาด | เซิร์ฟเวอร์ |
+
+&gt; **ตอน production จะไม่ส่ง stack trace กลับไป** — เปิดเผยโครงสร้างภายในให้คนภายนอกเห็นไม่ได้
+
+---
+
+## CORS
+
+API อนุญาตให้เรียกจาก origin ที่กำหนดใน `CORS_ORIGIN` เท่านั้น
+
+```
+Access-Control-Allow-Origin: http://localhost:5173
+```
+
+**ถ้าเรียกจาก origin อื่น** เบราว์เซอร์จะบล็อกก่อนที่โค้ดจะได้เห็น response — จะเห็น error ใน Console ว่าถูกบล็อกโดย CORS policy
+
+&gt; ⚠ CORS เป็นกลไกของ **เบราว์เซอร์** เท่านั้น · Postman และ curl ไม่ถูกบล็อก เพราะไม่ใช่เบราว์เซอร์
+
+---
+
+## Environment Variables
+
+### ฝั่ง API (`api/.env`)
+
+| ตัวแปร | ค่าเริ่มต้น | คำอธิบาย |
+|---|---|---|
+| `PORT` | `3001` | พอร์ตที่ API รับคำขอ |
+| `CORS_ORIGIN` | `http://localhost:5173` | origin ที่อนุญาตให้เรียก |
+| `NODE_ENV` | `development` | `production` จะเปลี่ยนรูปแบบ log และซ่อน stack trace |
+
+### ฝั่ง Frontend (`frontend/.env.local`)
+
+| ตัวแปร | ค่าเริ่มต้น | คำอธิบาย |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:3001` | ที่อยู่ของ API |
+
+&gt; **ต้องขึ้นต้นด้วย `VITE_`** ไม่งั้น Vite จะไม่ส่งค่าไปให้โค้ดฝั่งเบราว์เซอร์
+&gt; และ**ห้าม commit ไฟล์ `.env`** — ใช้ `.env.example` เป็นตัวอย่างแทน
+
+---
+
+## การรันทั้งระบบ
+
+ต้องเปิด **2 terminal** พร้อมกัน
+
+```bash
+# Terminal 1 — API
+cd api &amp;&amp; npm run dev          # http://localhost:3001
+
+# Terminal 2 — Frontend
+cd frontend &amp;&amp; npm run dev     # http://localhost:5173
+```
+
+**ลำดับสำคัญ** — เปิด API ก่อนเสมอ ไม่งั้น frontend จะขึ้นข้อความว่าติดต่อเซิร์ฟเวอร์ไม่ได้
+
+---
+
+## Data Model (เพิ่มใน Week 10)
+
+API เก็บข้อมูลในฐานข้อมูล SQLite (`api/data/campus.db`) แยกเป็น 2 ตาราง
+
+### ตาราง `users`
+
+| คอลัมน์ | ชนิด | ข้อกำหนด |
+|---|---|---|
+| `id` | INTEGER | PRIMARY KEY AUTOINCREMENT |
+| `name` | TEXT | NOT NULL |
+| `department` | TEXT | NOT NULL |
+| `email` | TEXT | NOT NULL UNIQUE |
+
+### ตาราง `requests`
+
+| คอลัมน์ | ชนิด | ข้อกำหนด |
+|---|---|---|
+| `id` | TEXT | PRIMARY KEY (รูปแบบ `REQ-NNN`) |
+| `requester_id` | INTEGER | NOT NULL · FOREIGN KEY → `users(id)` |
+| `request_type` | TEXT | NOT NULL · CHECK 4 ค่า |
+| `location` · `details` | TEXT | NOT NULL |
+| `priority` | TEXT | DEFAULT `&#039;normal&#039;` · CHECK |
+| `status` | TEXT | DEFAULT `&#039;pending&#039;` · CHECK |
+| `created_at` | TEXT | DEFAULT เวลาปัจจุบัน |
+
+### ข้อสังเกตสำคัญ
+
+**โครงสร้างในฐานข้อมูลไม่เหมือนรูปแบบที่ API ส่งออก**
+
+- ฐานข้อมูลเก็บ `requester_id` (ตัวเลข) เพื่อไม่ให้ข้อมูลผู้ใช้ซ้ำ
+- API คืน `requesterName` (ชื่อ) เพราะ frontend ต้องการแบบนั้น
+- **ชั้น service เป็นตัวแปลงระหว่างสองรูปแบบด้วย `JOIN` และ `AS`**
+
+ตอน POST — frontend ส่ง `requesterName` มา · service หา `id` ของชื่อนั้น ถ้ายังไม่มีก็สร้าง user ใหม่ให้ แล้วเก็บ `requester_id` ลงตาราง `requests`
+</pre></details><details><summary>DATABASE_CHOICES.md</summary><pre># ทางเลือกฐานข้อมูล — SQLite, NoSQL และ async
+
+&gt; บันทึกตอบคำถามจากบท &quot;อ่านเพิ่มเติม&quot; (CP41)
+
+## 1. ทำไมโปรเจกต์นี้เลือก SQLite แทน MongoDB
+
+ข้อมูลของเรา (users, requests) **มีโครงสร้างชัดเจนและมีความสัมพันธ์กัน** — คำร้องแต่ละใบชี้ไปหาผู้ใช้หนึ่งคนด้วย foreign key
+
+SQL เหมาะกับข้อมูลแบบนี้เพราะ:
+- บังคับโครงสร้าง (schema) และความถูกต้อง (constraint) ได้
+- JOIN ดึงข้อมูลข้ามตารางได้ในคำสั่งเดียว
+- ความสัมพันธ์ระหว่างตารางเป็นเรื่องหลักของ SQL
+
+MongoDB (NoSQL) เหมาะกว่าเมื่อข้อมูล**ไม่มีโครงตายตัว** หรือแต่ละรายการหน้าตาต่างกันมาก เช่น log, เอกสารที่ field ไม่เท่ากัน
+
+## 2. ถ้าวันหนึ่งต้องเปลี่ยนไป MongoDB จะกระทบชั้นไหน
+
+| ชั้น | กระทบไหม | เพราะอะไร |
+|---|---|---|
+| Frontend | ❌ ไม่ | ยังเรียก API เดิม รับ JSON เดิม |
+| Controller | ⚠ กระทบ | ต้องเติม `await` ทุกที่ (MongoDB เป็น async) |
+| Service | ✅ กระทบเต็ม | เขียนใหม่ทั้งไฟล์ให้ใช้ MongoDB driver |
+| Database | ✅ เปลี่ยน | จาก SQLite เป็น MongoDB |
+
+&gt; **ต่างจาก 4 ครั้งก่อน** ที่แก้แค่ service เพราะครั้งนี้เปลี่ยน sync→async ซึ่งเป็นการเปลี่ยน &quot;สัญญา&quot; ของ service จึงกระทบ controller ด้วย
+
+## 3. async จำเป็นเมื่อไร ไม่จำเป็นเมื่อไร
+
+| | ต้องรอไหม | ใช้ async ไหม |
+|---|---|---|
+| SQLite (ไฟล์ในเครื่อง) | อ่านเสร็จทันที | ❌ ไม่ต้อง |
+| MongoDB Atlas (คนละเครื่อง) | รอข้อมูลข้ามเครือข่าย | ✅ ต้อง |
+| เรียก API ภายนอก | รอเครือข่าย | ✅ ต้อง |
+| อ่านไฟล์ขนาดใหญ่ | รอดิสก์ | ✅ ควร |
+
+**หลักการ** — ใช้ async เมื่อต้อง**รอ**บางอย่างที่ไม่เสร็จทันที (เครือข่าย ดิสก์) เพื่อไม่ให้โปรแกรมค้างรอ
+
+## 4. ไปเรียนต่อที่ไหน
+
+- **วิชาฐานข้อมูลเทอมหน้า** — normalization, transaction, index เชิงลึก
+- MongoDB University (ฟรี) · เอกสาร Mongoose
+- หัวข้อ async/await ใน JavaScript เชิงลึก
+</pre></details><details><summary>TEST_CASES.md</summary><pre># ตารางกรณีทดสอบ (Test Cases) — POST /api/requests
+
+ออกแบบ**ก่อน**เขียนโค้ด test (CP44) · แต่ละข้อเปลี่ยนข้อมูลทีละช่องจากข้อมูลที่ถูกต้อง
+
+**ข้อมูลตั้งต้นที่ถูกต้อง:** ชื่อ `สมชาย ใจดี` · ประเภท `แจ้งซ่อม` · สถานที่ `ห้อง 301` · รายละเอียด `แอร์ไม่เย็นตั้งแต่เช้า` · ความเร่งด่วน `normal`
+
+| รหัส | กลุ่ม | ข้อมูลที่เปลี่ยน | ผลที่คาดหวัง | ระดับ test |
+|---|---|---|---|---|
+| TC-01 | ถูกต้อง | — (ถูกทุกช่อง) | ไม่มี error · API ตอบ 201 | unit + integration |
+| TC-02 | ค่าขอบ รายละเอียด | 9 ตัวอักษร | error 1 ข้อ | unit |
+| TC-03 | ค่าขอบ รายละเอียด | 10 ตัวอักษรพอดี | ผ่าน | unit |
+| TC-04 | ค่าขอบ รายละเอียด | 11 ตัวอักษร | ผ่าน | unit |
+| TC-05 | ไม่ถูกต้อง | รายละเอียดเป็นช่องว่างล้วน | error (ตัดช่องว่างก่อนนับ) | unit |
+| TC-06 | ค่าขอบ ชื่อ | 1 ตัวอักษร | error | unit |
+| TC-07 | ค่าขอบ ชื่อ | 2 ตัวอักษร | ผ่าน | unit |
+| TC-08 | นอกรายการ | ประเภท `แจ้งเหตุ` | error ประเภทไม่ถูกต้อง | unit |
+| TC-09 | นอกรายการ | ความเร่งด่วน `high` | error | unit |
+| TC-10 | ผิดรูปแบบ | body เป็น null / array / ตัวเลข | error เดียว &quot;ต้องส่งข้อมูล&quot; | unit |
+| TC-11 | ผิดหลายช่อง | `{}` | error ครบ 5 ช่อง · API ตอบ 400 | unit + integration |
+| TC-12 | ลำดับการทำงาน | ลบ REQ-002 แล้วเพิ่มใหม่ | 201 · รหัสไม่ซ้ำ | integration |
+
+&gt; **ทำไมต้องมีค่าขอบ** — bug ชอบซ่อนตรงขอบ เช่น เขียน `&lt;=` แทน `&lt;` · ทดสอบ 9 · 10 · 11 จะเห็นทันที
+</pre></details><details><summary>DEBUG_LOG.md</summary><pre># บันทึกการไล่ปัญหา (Debug Log)
+
+แต่ละ bug ตอบ 6 ข้อ: อาการ → ทำซ้ำ → เครื่องมือ → สาเหตุ → วิธีแก้ → test ที่กันไม่ให้กลับมา
+
+---
+
+## BUG #0 · ค่าขอบรายละเอียด 10 ตัวอักษร (test เจอ — ไม่มีผู้ใช้แจ้ง)
+
+- **อาการ:** ส่งรายละเอียด 10 ตัวอักษรพอดี ถูกปฏิเสธ ทั้งที่ข้อความบอกว่า &quot;อย่างน้อย 10&quot;
+- **วิธีทำซ้ำ:** unit test `validateRequestInput({ ...valid, details: &#039;1234567890&#039; })`
+- **เครื่องมือ:** unit test ค่าขอบ (TC-03) — fail ทันทีที่เขียน
+- **สาเหตุ (ไฟล์:บรรทัด):** `api/src/validators/requestValidator.js` เงื่อนไข `length &lt;= MIN_DETAILS` ทำให้ 10 ตัวถูกนับว่าไม่ผ่าน
+- **วิธีแก้:** เปลี่ยนเป็น `length &lt; MIN_DETAILS`
+- **test ที่กัน:** `tests/unit/requestValidator.test.js` → &quot;10 ตัวอักษร → ผ่าน (ตรงขอบพอดี)&quot;
+
+## BUG #1 · ลบคำร้องแล้วเพิ่มใหม่ ได้ 500
+
+- **อาการ:** หลังลบคำร้องรายการกลาง การสร้างคำร้องใหม่ได้ 500
+- **วิธีทำซ้ำ:** `DELETE /api/requests/REQ-002` แล้ว `POST /api/requests` → 500
+- **เครื่องมือ:** อ่าน log ใน terminal (`UNIQUE constraint failed: requests.id`) → วาง breakpoint ใน `nextId()` ด้วย JavaScript Debug Terminal เห็นว่าได้ `REQ-005` ซึ่งมีอยู่แล้ว
+- **สาเหตุ (ไฟล์:บรรทัด):** `api/src/services/requestService.js` ฟังก์ชัน `nextId()` คำนวณรหัสจาก `COUNT(*) + 1` — เมื่อลบรายการกลาง จำนวนลดลง รหัสที่ได้จึงชนกับรหัสที่ยังอยู่
+- **วิธีแก้:** หารหัสล่าสุด (`ORDER BY id DESC LIMIT 1`) แล้วบวก 1
+- **test ที่กัน:** `tests/integration/requests.api.test.js` → &quot;ลบรายการกลาง แล้วเพิ่มใหม่ → 201 และรหัสไม่ซ้ำของเดิม&quot;
+
+## BUG #2 · Dashboard แสดง &quot;กำลังดำเนินการ 0&quot;
+
+- **อาการ:** การ์ดสรุปบอกว่ากำลังดำเนินการ 0 แต่ในรายการมีคำร้อง in-progress
+- **วิธีทำซ้ำ:** เปิด Dashboard ด้วยข้อมูลตั้งต้น (REQ-002 เป็น in-progress)
+- **เครื่องมือ:** DevTools → Network → `GET /api/requests` ส่ง `&quot;status&quot;: &quot;in-progress&quot;` ถูกต้อง → ปัญหาอยู่ฝั่ง frontend → วาง breakpoint ใน `summarizeRequests` (DevTools → Sources)
+- **สาเหตุ (ไฟล์:บรรทัด):** `frontend/src/utils/requestSummary.js` นับด้วย `&#039;in progress&#039;` (ช่องว่าง) แทน `&#039;in-progress&#039;` (ขีด) จึงไม่ตรงกับค่าที่ API ส่งมา
+- **วิธีแก้:** ใช้ `&#039;in-progress&#039;` ให้ตรงกับ API
+- **test ที่กัน:** `frontend/src/utils/requestSummary.test.js` → &quot;นับครบทุกสถานะ&quot;
+
+## BUG #3 · เปลี่ยนสถานะคำร้องที่ไม่มีอยู่ ได้ 500
+
+- **อาการ:** `PUT /api/requests/REQ-999` ได้ 500 แทน 404
+- **วิธีทำซ้ำ:** `curl -X PUT localhost:3001/api/requests/REQ-999 -H &quot;Content-Type: application/json&quot; -d &#039;{&quot;status&quot;:&quot;completed&quot;}&#039;`
+- **เครื่องมือ:** อ่าน stack trace ใน terminal — บรรทัดแรกบอก `TypeError: Cannot read properties of null (reading &#039;id&#039;)` บรรทัดถัดไปบอกไฟล์และบรรทัดใน controller
+- **สาเหตุ (ไฟล์:บรรทัด):** `api/src/controllers/requestController.js` ใน `updateRequestStatus` มีบรรทัด log `updated.id` อยู่**ก่อน**การตรวจ `if (!updated)` — เมื่อไม่พบคำร้อง `updated` เป็น null จึงพัง
+- **วิธีแก้:** ย้าย log ไปไว้หลังการตรวจ null
+- **test ที่กัน:** `tests/integration/requests.api.test.js` → &quot;คำร้องที่ไม่มีอยู่ → 404 (ไม่ใช่ 500)&quot;
+</pre></details><details><summary>BUG_REPORTS.md</summary><pre># รายงานปัญหาจากผู้ใช้ (Bug Reports)
+
+ระบบนี้เปิดให้ทดลองใช้แล้ว ผู้ใช้แจ้งปัญหาเข้ามา 3 เรื่อง — **มีแต่อาการ ยังไม่มีใครรู้สาเหตุ**
+งานของเราคือ ทำให้เกิดซ้ำ → หาสาเหตุด้วยเครื่องมือ → แก้ → เขียน test กันไม่ให้กลับมา
+
+&gt; บันทึกการไล่ปัญหาแต่ละเรื่องใน `DEBUG_LOG.md`
+
+---
+
+## BUG #1 · ลบคำร้องแล้วเพิ่มใหม่ ขึ้น error
+
+**ผู้แจ้ง:** เจ้าหน้าที่ฝ่ายอาคาร
+
+&gt; &quot;วันนี้ลบคำร้องที่ซ้ำไป 1 รายการ แล้วพอนักศึกษาส่งคำร้องใหม่ ระบบขึ้นว่า &#039;เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์&#039;
+&gt; เมื่อวานยังส่งได้ปกติ&quot;
+
+- เกิดทุกครั้งหรือไม่: ไม่ทุกครั้ง — เมื่อวานส่งได้ วันนี้ส่งไม่ได้
+- หน้าจอที่เกิด: หน้า &quot;สร้างคำร้องใหม่&quot;
+
+## BUG #2 · ตัวเลข &quot;กำลังดำเนินการ&quot; บน Dashboard เป็น 0 ตลอด
+
+**ผู้แจ้ง:** หัวหน้าฝ่ายบริการ
+
+&gt; &quot;การ์ดสรุปด้านบนบอกว่ากำลังดำเนินการ 0 รายการ แต่ในรายการด้านล่างเห็นคำร้องสถานะ in-progress อยู่
+&gt; ตัวเลขอื่นดูถูกต้อง&quot;
+
+- เกิดทุกครั้งหรือไม่: ทุกครั้ง
+- หน้าจอที่เกิด: Dashboard
+
+## BUG #3 · เปลี่ยนสถานะคำร้องที่เพิ่งถูกลบ ขึ้น error 500
+
+**ผู้แจ้ง:** เจ้าหน้าที่ฝ่าย IT
+
+&gt; &quot;เพื่อนร่วมงานลบคำร้องไปแล้ว แต่หน้าจอของผมยังค้างอยู่ พอผมกดเปลี่ยนสถานะ ได้ error 500
+&gt; น่าจะต้องบอกว่า &#039;ไม่พบคำร้อง&#039; มากกว่า&quot;
+
+- เกิดทุกครั้งหรือไม่: ทุกครั้งที่เปลี่ยนสถานะคำร้องที่ไม่มีอยู่
+- ทดสอบซ้ำได้ด้วย: `PUT /api/requests/REQ-999` พร้อม `{ &quot;status&quot;: &quot;completed&quot; }`
+</pre></details></section>
+    <footer>ENGSE203 · week-13 · engse203-student-labs-68543210078</footer></main></body></html>

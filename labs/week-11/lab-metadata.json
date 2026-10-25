@@ -1,0 +1,26 @@
+{
+  "week": "week-11",
+  "title": "Full-Stack Integration & Production Build",
+  "status": "ready",
+  "sourceOrigin": "student-created",
+  "sourcePath": "labs/week-11/source",
+  "sourceRef": "main",
+  "evidencePaths": [
+    "labs/week-11/source/evidence"
+  ],
+  "evidenceRef": "main",
+  "originalRepoUrl": "https://github.com/se-rmutl/engse203-lab",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "",
+  "testStatus": "pass",
+  "testSummary": "ตัวตรวจงานหลัก 37/37",
+  "notes": "ระบบ React + Express + SQLite พร้อม config, health check และ production build เผยแพร่โค้ดและภาพหลักฐานโดยไม่มีวิดีโอสาธิต",
+  "documents": [
+    "labs/week-11/source/README.md",
+    "labs/week-11/source/API_CONTRACT.md",
+    "labs/week-11/source/AI_USAGE.md",
+    "labs/week-11/source/DATABASE_CHOICES.md"
+  ],
+  "frontendPath": "labs/week-11/source/frontend"
+}

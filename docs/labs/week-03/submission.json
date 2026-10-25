@@ -10,7 +10,11 @@
   "testStatus": "pass",
   "notes": "Static site ต้องมี index.html ที่ publish root",
   "pageUrl": "https://mangporunicorn.github.io/engse203-student-labs-68543210078/labs/week-03/",
-  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/lab/week-03/labs/week-03/source",
+  "sourceUrl": "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/source",
+  "evidenceUrls": [
+    "https://github.com/mangporunicorn/engse203-student-labs-68543210078/tree/main/labs/week-03/evidence"
+  ],
   "hasPublish": true,
+  "hasDemo": false,
   "sourceEntries": 8
 }
