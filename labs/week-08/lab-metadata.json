@@ -15,7 +15,8 @@
   "submissionTag": "midterm-submission-v1",
   "testStatus": "pass",
   "testSummary": "build ผ่าน",
-  "notes": "ผลงานสอบกลางภาค: Debug, Search, Persistence และ PriorityBadge เผยแพร่จาก branch midterm",
+  "notes": "ผลงานสอบกลางภาคเก็บบน branch midterm โดยไม่เผยแพร่บน GitHub Pages",
+  "publishOnPages": false,
   "documents": [],
   "kind": "exam"
 }

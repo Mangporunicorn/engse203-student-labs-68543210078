@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { ROOT, PLACEHOLDER_FILES, escapeHtml as h, exists, listLabs, meaningfulEntries, readJson, validHttpUrl } from '../common.mjs';
+import { ROOT, PLACEHOLDER_FILES, escapeHtml as h, exists, listPublishedLabs, meaningfulEntries, readJson, validHttpUrl } from '../common.mjs';
 
 const config = await readJson(path.join(ROOT, 'student-config.json'));
 const repoUrl = `https://github.com/${config.githubUsername}/${config.repositoryName}`;
@@ -33,7 +33,7 @@ await fs.mkdir(path.join(docsRoot, 'labs'), { recursive: true });
 await fs.writeFile(path.join(docsRoot, '.nojekyll'), '');
 const cards = [], summaries = [];
 
-for (const week of await listLabs()) {
+for (const week of await listPublishedLabs()) {
   const labRoot = path.join(ROOT, 'labs', week);
   const metadata = await readJson(path.join(labRoot, 'lab-metadata.json'));
   const target = path.join(docsRoot, 'labs', week);
@@ -97,7 +97,7 @@ for (const week of await listLabs()) {
 
 const dashboard = shell(`ENGSE203 LAB Portfolio — ${config.studentId}`,
   `<small>ENGSE203 · Student LAB Repository</small><h1>LAB Portfolio</h1><p>${h(config.studentName)} · ${h(config.studentId)}</p><div class="profile"><span>${h(config.section)}</span><span>@${h(config.githubUsername)}</span><span>${summaries.length} สัปดาห์</span></div>`,
-  `<div class="notice">รวมผลงาน LAB และสอบกลางภาค เปิดเว็บแอป ทดลองเดโม ดู Source Code และอ่านหลักฐานของแต่ละสัปดาห์ได้จากหน้านี้</div><section class="labs" aria-label="ผลงานแต่ละสัปดาห์">${cards.join('\n')}</section><footer>${link(repoUrl, 'GitHub Repository')} · ${h(config.repositoryName)}</footer>`);
+  `<div class="notice">รวมผลงาน LAB เปิดเว็บแอป ทดลองเดโม ดู Source Code และอ่านหลักฐานของแต่ละสัปดาห์ได้จากหน้านี้</div><section class="labs" aria-label="ผลงานแต่ละสัปดาห์">${cards.join('\n')}</section><footer>${link(repoUrl, 'GitHub Repository')} · ${h(config.repositoryName)}</footer>`);
 await fs.writeFile(path.join(docsRoot, 'index.html'), dashboard);
 await fs.writeFile(path.join(docsRoot, 'labs.json'), JSON.stringify(summaries, null, 2) + '\n');
 console.log(`Build Pages Hub: PASS — ${summaries.length} weeks`);

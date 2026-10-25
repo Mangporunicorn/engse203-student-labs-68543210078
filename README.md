@@ -48,27 +48,26 @@ https://<github-username>.github.io/engse203-student-labs-<student-id>/
 
 ## Portfolio ที่เผยแพร่
 
-รวม Week 01–13 โดย Week 08 เป็นงานสอบกลางภาคจาก branch `midterm`
+รวม LAB Week 01–07 และ 09–13 โดยไม่เผยแพร่งานสอบกลางภาคบน GitHub Pages
 
-- Week 02–05 และ Midterm: เปิดเว็บแอปได้โดยตรง
+- Week 02–05: เปิดเว็บแอปได้โดยตรง
 - Week 07 และ 10–13: มีเดโม frontend สำหรับ GitHub Pages โดยใช้ข้อมูลใน browser storage แยกตามสัปดาห์; API, SQLite และ authentication จริงยังอยู่ใน source เดิม
 - ทุกสัปดาห์มี `report.html` สำหรับอ่านเอกสาร ผลตรวจ และภาพหลักฐาน
 - Week 11 เผยแพร่โค้ดและภาพหลักฐานโดยไม่มีวิดีโอ ไม่เพิ่มงาน Challenge
 
-`lab-metadata.json` รองรับ `sourcePath`, `sourceRef`, `evidencePaths`, `documents` และ `frontendPath` เพื่อเชื่อมงานที่มีโครงสร้างต่างกัน
+`lab-metadata.json` รองรับ `sourcePath`, `sourceRef`, `evidencePaths`, `documents` และ `frontendPath` เพื่อเชื่อมงานที่มีโครงสร้างต่างกัน ตั้ง `publishOnPages: false` เพื่อไม่เผยแพร่สัปดาห์นั้น รวมถึงหน้าเว็บ ไฟล์แอป และรายการใน Portfolio
 
 เมื่อแก้ frontend ของเดโม ให้ติดตั้ง dependencies ใน `frontend/` ของสัปดาห์นั้นก่อน แล้วสร้าง publish input ใหม่:
 
 ```bash
 npm run build:pages:demos
-npm run build:pages:midterm
 npm run build:pages
 npm run verify
 npm run verify:pages
 node --test scripts/pages/demo-api.test.mjs
 ```
 
-คำสั่ง build ของ Midterm ต้องมี ref `midterm` หรือ `origin/midterm` และ dependencies ใน `labs/week-07/source/frontend/` (React/Vite รุ่นเดียวกับข้อสอบ) โดยไม่แก้หรือ merge source ของข้อสอบ
+งานสอบกลางภาคยังเก็บไว้บน branch `midterm` และคำสั่ง build ของ Midterm จะข้ามเมื่อ `publishOnPages` เป็น `false`
 
 Pages ใช้ `main /docs` และจะเผยแพร่เมื่อ push หรือ merge ผล build เข้า `main`
 
